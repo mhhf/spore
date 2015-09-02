@@ -1,5 +1,7 @@
 language: node_js
 node_js:
 - 0.12.7
+before_script:
+- go get -u github.com/ipfs/go-ipfs/cmd/ipfs
 script:
 - npm run test
