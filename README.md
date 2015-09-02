@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/mhhf/spore.svg)](https://travis-ci.org/mhhf/spore)
+
 For fast development of DApps a package management is needed. Here is a quick and dirty description on how I imagine such a package manager (`spore`) could work. 
 
 ### Types
