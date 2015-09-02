@@ -1,0 +1,22 @@
+{
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "title": "name"
+    },
+    
+    "description": {
+      "type": "string",
+      "title": "Description"
+    },
+    "version": {
+      "type": "string",
+      "title": "Version"
+    },
+    "dependencies": {
+      "type": "object"
+    }
+  },
+  "additionalProperties": false
+}

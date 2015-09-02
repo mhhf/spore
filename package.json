@@ -1,0 +1,35 @@
+{
+  "name": "spore",
+  "version": "0.0.1",
+  "description": "Spore - Simple package manager for Ethereum",
+  "preferGlobal": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mhhf/spore.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "ethereum",
+    "dapp"
+  ],
+  "bin": {
+    "spore": "spore.bash"
+  },
+  "author": "Denis Erfurt",
+  "license": "MIT",
+  "dependencies": {
+    "babel": "*",
+    "docopt": "^0.6.2"
+  },
+  "scripts": {
+    "test": "node_modules/mocha/bin/mocha ./test/"
+  },
+  "devDependencies": {
+    "chai": "^3.2.0",
+    "mocha": "^2.3.0",
+    "should": "^7.1.0",
+    "tv4": "^1.2.5"
+  }
+}
