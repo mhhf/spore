@@ -23,7 +23,7 @@
     "babel": "*",
     "docopt": "^0.6.2",
     "ipfs-api": "^2.3.0",
-    "ipfs-js": "0.0.3"
+    "ipfs-js": "git+https://github.com/mhhf/ipfs.js.git#master"
   },
   "devDependencies": {
     "chai": "^3.2.0",
