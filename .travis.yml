@@ -7,5 +7,6 @@ before_script:
 - go get -u github.com/ipfs/go-ipfs/cmd/ipfs
 - ipfs init
 - ipfs daemon &
+- sleep 5
 script:
 - npm test
