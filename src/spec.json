@@ -5,10 +5,10 @@
       "type": "string",
       "title": "name"
     },
-    
     "description": {
       "type": "string",
-      "title": "Description"
+      "title": "Description",
+      "maxLength": 80
     },
     "version": {
       "type": "string",
@@ -16,6 +16,12 @@
     },
     "dependencies": {
       "type": "object"
+    },
+    "files": {
+      "type": "array"
+    },
+    "dagNode": {
+      "type": "string"
     }
   },
   "additionalProperties": false

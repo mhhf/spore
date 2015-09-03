@@ -1,0 +1,7 @@
+{
+  "name": "subcurrencies",
+  "version": "0.1.0",
+  "description": "Canonical example taken from ethereum wiki",
+  "dependencies": {},
+  "files": []
+}

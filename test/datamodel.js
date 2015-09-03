@@ -17,7 +17,8 @@ describe('datamodel', function() {
       description: "Coin is a simple altcoin which gives the contract creator\n a fixed amount. \n\n No additional functions are implemented.",
       dependencies: {
         "ethereum:metacoin": "0.1.0"
-      }
+      },
+      dagNode: "QmRSKgxMc2Hds1CFGjkpzyYEMuFrNMrPW75fLHFq752B2d"
     };
     
     var validation = tv4.validate( example, schema );

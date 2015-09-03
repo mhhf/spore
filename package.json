@@ -8,7 +8,8 @@
     "url": "https://github.com/mhhf/spore.git"
   },
   "scripts": {
-    "test": "node_modules/mocha/bin/mocha ./test/"
+    "test": "node_modules/mocha/bin/mocha ./test/",
+    "solc": "solc --input-file src/contracts/spore.sol --combined-json json-abi,natspec-dev,natspec-user > src/contracts.json"
   },
   "keywords": [
     "ethereum",
@@ -22,8 +23,12 @@
   "dependencies": {
     "babel": "*",
     "docopt": "^0.6.2",
+    "ether-pudding": "^0.10.0",
+    "fs-extra": "^0.24.0",
     "ipfs-api": "^2.3.0",
-    "ipfs-js": "0.0.3"
+    "ipfs-js": "0.0.3",
+    "readline-sync": "^1.2.21",
+    "web3": "^0.12.2"
   },
   "devDependencies": {
     "chai": "^3.2.0",

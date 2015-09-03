@@ -12,9 +12,6 @@ fi
 # Hack. babel-node will clobber -e, and it doesn't look like `--` will stop it.
 # Because we're doing string replacement, we have to take edge cases into account.
 args=" $@"
-args=${args// -e / --environment }
-args=${args// -e=/ --environment=}
-args=${args// -environment/ --environment}
+args="$SPORE_WORKING_DIR $args"
 
-cd $SPORE_NPM_LOCATION
 $SPORE_NPM_LOCATION/node_modules/.bin/babel-node -- $SPORE_NPM_LOCATION/spore.es6 ${args}
