@@ -35,4 +35,20 @@ describe('IPFS', function() {
     
   });
   
+  it("should grab a string from the network", function(done){
+    
+    
+    ipfs.cat('QmTkukZw6MBSfGZ2nTubdCsMeoKyNbrNidyGiJMUEh2dCx', function( err, text ) {
+      if( err ) throw err;
+      
+      text.should.be.a('string');
+      text.slice(0,6).should.eql('import');
+      
+      done();
+      
+    })
+    
+    
+  });
+  
 });
