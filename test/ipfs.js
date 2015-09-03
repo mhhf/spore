@@ -3,7 +3,7 @@ var chai = require('chai');
 var should = require('should');
 
 // https://github.com/ConsenSys/ipfs.js
-var ipfs = require('ipfs-js');
+var ipfs = require('ipfs-js/ipfs.js');
 
 
 describe('IPFS', function() {
@@ -11,7 +11,8 @@ describe('IPFS', function() {
   it("should reach the provider", function(done){
     
     // Setup IPFS
-    ipfs.setProvider({host: 'localhost', port: '5001'});
+    // ipfs.setProvider({host: 'localhost', port: '5001'});
+    ipfs.setProvider(require('ipfs-api')('localhost', '5001'));
     
     done();
   });
