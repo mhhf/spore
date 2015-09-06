@@ -17,11 +17,28 @@
     "dependencies": {
       "type": "object"
     },
+    "contracts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "file": {
+            "type": "string"
+          },
+          "test": {
+            "type": "string"
+          },
+          "abi": {
+            "type": "object"
+          },
+          "natspec": {
+            "type": "object"
+          }
+        }
+      }
+    },
     "files": {
       "type": "array"
-    },
-    "dagNode": {
-      "type": "string"
     }
   },
   "additionalProperties": false
