@@ -21,6 +21,7 @@
   "author": "Denis Erfurt",
   "license": "MIT",
   "dependencies": {
+    "async": "^1.4.2",
     "babel": "*",
     "docopt": "^0.6.2",
     "ether-pudding": "^0.10.0",
@@ -28,8 +29,8 @@
     "ipfs-api": "^2.3.0",
     "ipfs-js": "0.0.3",
     "readline-sync": "^1.2.21",
-    "web3": "^0.12.2",
-    "tv4": "^1.2.5"
+    "tv4": "^1.2.5",
+    "web3": "^0.12.2"
   },
   "devDependencies": {
     "chai": "^3.2.0",

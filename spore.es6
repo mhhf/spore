@@ -3,6 +3,8 @@ var readlineSync = require('readline-sync');
 var tv4 = require('tv4');
 var Pudding = require('ether-pudding')
 var child_process = require('child_process');
+var async = require('async');
+
 
 var docopt = require('docopt');
 
@@ -106,17 +108,18 @@ if( application.init ) { //=====================================================
   .then( ( ipfsAddress ) => {
     
     // TODO - array.find 
-    ipfs.api.ls( ipfsAddress, function(err, obj ) {
+    ipfs.api.ls( ipfsAddress, function( err, obj ) {
       if (err) throw err;
       
-      obj.Objects[0].Links.forEach( ( o ) => {
-        if( o.Name === 'spore.json' ) {
-          ipfs.cat( o.Hash, ( err, content ) => {
-            console.log( content );
-            process.exit();
-          });
-        }
+      var json = obj.Objects[0].Links.find( ( o ) => {
+        return o.Name === 'spore.json';
       });
+      
+      ipfs.cat( json.Hash, ( err, content ) => {
+        console.log( content );
+        process.exit();
+      });
+      
     });
     
   });
@@ -182,38 +185,44 @@ if( application.init ) { //=====================================================
     
   });
  
-} else if( application.install) { //============================================ INSTALL
+} else if( application.install ) { //============================================ INSTALL
   let name = application['<package>'];
 
   var cloneDir = ( addr, path, cb ) => {
     ipfs.api.ls( addr, ( err, node ) => {
       
+      var rdyCounter = node.Objects[0].Links.length;
       node.Objects[0].Links.forEach( ( l ) => {
         
         if( l.Type === 1 ) { // path
-          fs.mkdirSync(  path + '/' + l.Name )
-          cloneDir( l.Hash, path + '/' + l.Name, cb );
+          // If dir don't exists: update
+          if( !fs.existsSync( path + '/' + l.Name ) )
+            fs.mkdirSync(  path + '/' + l.Name )
+          
+          cloneDir( l.Hash, path + '/' + l.Name, () => {
+            if( --rdyCounter === 0 ) cb();
+          });
         } else if( l.Type === 2 ) { // file
           ipfs.cat( l.Hash, ( err, data ) => {
-            fs.writeFileSync( path + '/' + l.Name, data );
+            if( l.Name != "spore.json" ) {
+              fs.writeFileSync( path + '/' + l.Name, data );
+            }
+            if( --rdyCounter === 0 ) cb();
           });
         }
         
       });
     });
-  }
+  };
   
   contract.getLink.call( name )
   .then( ( ipfsAddress ) => {
     console.log('fetching '+ ipfsAddress );
-    // TODO - check if not error and not null
+    // TODO - check if contract returns not error and not null
     
-    if( fs.existsSync( path + '/.spore/packages/' + name ) ) {
-      fs.removeSync( path + '/.spore/packages/' + name );
-    }
-    
-    fs.mkdirSync( path + '/.spore/packages/' + name );
-    cloneDir( ipfsAddress, path + '/.spore/packages/' + name, () => {
+    // add new package to dependencies
+
+    cloneDir( ipfsAddress, path + '/', () => {
       process.exit();
     });
   });
