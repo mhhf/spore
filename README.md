@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/mhhf/spore.png?label=ready&title=Ready)](https://waffle.io/mhhf/spore)
 [![Build Status](https://travis-ci.org/mhhf/spore.svg)](https://travis-ci.org/mhhf/spore)
 
 For fast development of DApps a package management is needed. Here is a quick and dirty description on how I imagine such a package manager (`spore`) could work. 
