@@ -7,6 +7,12 @@ contract Spore {
     string ipfs;
   }
   
+  bytes32[] public packagesArray;
+  
+  function numPackages() constant returns ( uint number ) {
+    return packagesArray.length;
+  }
+  
   // Package Name => Package Object
   mapping (bytes32 => Package) packages;
   
@@ -19,6 +25,11 @@ contract Spore {
     // Test if package already exists
     Package test = packages[name];
     if( test.owner != 0 && test.owner != msg.sender ) return false;
+    
+    if( test.owner == 0 ) {
+      packagesArray.length++;
+      packagesArray[ packagesArray.length -1 ] = name;
+    }
     
     packages[name] = Package( msg.sender, ipfs );
     

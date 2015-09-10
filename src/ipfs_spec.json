@@ -1,0 +1,28 @@
+{
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "title": "name"
+    },
+    "description": {
+      "type": "string",
+      "title": "Description",
+      "maxLength": 80
+    },
+    "version": {
+      "type": "string",
+      "title": "Version"
+    },
+    "dependencies": {
+      "type": "object"
+    },
+    "contracts": {
+      "type": "object"
+    },
+    "root": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
+}

@@ -18,26 +18,12 @@
       "type": "object"
     },
     "contracts": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "file": {
-            "type": "string"
-          },
-          "test": {
-            "type": "string"
-          },
-          "abi": {
-            "type": "object"
-          },
-          "natspec": {
-            "type": "object"
-          }
-        }
-      }
+      "type": "array"
     },
     "files": {
+      "type": "array"
+    },
+    "ignore": {
       "type": "array"
     }
   },
