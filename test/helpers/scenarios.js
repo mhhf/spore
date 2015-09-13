@@ -8,7 +8,7 @@ var scenarios = function(){
     fs.mkdirSync('./test/.scenarios/');
   }
   
-  var setupScenario = function( name, dep ) {
+  var setup = function( name, dep ) {
     if( typeof dep === 'string' ) dep = [dep];
     if( typeof dep === 'undefined' ) dep = [];
     let imports = dep
@@ -34,9 +34,15 @@ var scenarios = function(){
     fs.mkdirsSync(`./test/.scenarios/${name}/contracts`);
     fs.writeFileSync(`./test/.scenarios/${name}/contracts/${name}.sol`, contract);
   }
+  
+  var cleanup = function() {
+    fs.removeSync('./test/.scenarios/');
+  }
 
   return {
-  
+    setupAll,
+    setup,
+    cleanup
   };
 }
 

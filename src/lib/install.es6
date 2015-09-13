@@ -1,3 +1,5 @@
+"use strict";
+
 var tv4             = require('tv4');
 var fs              = require('fs-extra');
 var deasync         = require('deasync');
@@ -9,8 +11,6 @@ var _               = require('underscore');
 
 var pkg = require('./package.es6');
 var ipfs = require('./ipfs.es6');
-
-var working_dir = process.argv[2];
 
 var install = function( name ){
   

@@ -1,3 +1,5 @@
+"use strict";
+
 var deasync         = require('deasync');
 
 var getLinkSync     = deasync( spore.getLink );

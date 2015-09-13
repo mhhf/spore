@@ -1,3 +1,5 @@
+"use strict";
+
 var tv4                 = require('tv4');
 var fs                  = require('fs-extra');
 var child_process       = require('child_process');

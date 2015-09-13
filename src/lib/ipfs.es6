@@ -1,9 +1,9 @@
+"use strict";
+
 var deasync         = require('deasync');
 var async           = require('async');
 var fs              = require('fs');
 var _               = require('underscore');
-
-var pkg             = require('./package.es6');
 
 function IPFS ( ) {
    

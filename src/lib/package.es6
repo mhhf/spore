@@ -1,19 +1,23 @@
-var fs              = require('fs-extra');
-var tv4             = require('tv4');
-var colors          = require('colors');
-var _               = require('underscore');
-var ipfs            = require('./ipfs.es6');
-var deasync         = require('deasync');
-var async           = require('async');
+"use strict";
 
-var getLinkSync     = deasync( spore.getLink );
-var working_dir = process.argv[2];
+var fs          = require('fs-extra');
+var tv4         = require('tv4');
+var colors      = require('colors');
+var _           = require('underscore');
+var ipfs        = require('./ipfs.es6');
+var deasync     = require('deasync');
+var async       = require('async');
 
-function Package() {
+var spore       = require('./spore.es6');
+
+var getLinkSync = deasync( spore.getLink );
+// var working_dir = process.argv[2];
+
+function Package( config ) {
 
   // check if package is installed
   // Check if spore.json has the right format
-  let json = JSON.parse(fs.readFileSync( working_dir + '/spore.json', 'utf8' ));
+  let json = JSON.parse(fs.readFileSync( config.working_dir + '/spore.json', 'utf8' ));
   if( !tv4.validate( require('../user_spec.json'), json ) ) throw tv4.error;
   
   // PKG_NAME -> BOOLEAN
@@ -33,7 +37,7 @@ function Package() {
   }
   
   var saveJson = function() {
-    fs.writeFileSync( working_dir + '/spore.json', JSON.stringify( json, false, 2 ));
+    fs.writeFileSync( config.working_dir + '/spore.json', JSON.stringify( json, false, 2 ));
   }
   
   // TODO - nested deps
@@ -135,4 +139,4 @@ function Package() {
 }
 
 
-module.exports = Package()
+module.exports = Package

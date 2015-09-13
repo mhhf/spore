@@ -6,22 +6,21 @@ var path            = require('path');
 var _               = require('underscore');
 
 var ipfs            = require('./ipfs.es6');
-var pkg             = require('./package.es6');
 
 var getLinkSync     = deasync( spore.getLink );
 
-var working_dir = process.argv[2];
-
-var rm = function( name ) {
+var rm = function( config ) {
+  
+  var pkg = require('./package.es6')( config.working_dir );
   
   // check if package is installed
-  pkg.assertDependency(name);
+  pkg.assertDependency( config.package_name );
   
-  pkg.removeDep( name );
+  pkg.removeDep( config.package_name );
   
   pkg.saveJson();
   
-  console.log(`Package "${name}" successful removed."`.green);
+  console.log(`Package "${package_name}" successful removed."`.green);
 
 }
 module.exports = rm;

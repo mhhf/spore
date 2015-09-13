@@ -1,12 +1,14 @@
+"use strict";
+
 var deasync         = require('deasync');
 var _               = require('underscore');
 
-var pkg = require('./package.es6');
 var ipfs = require('./ipfs.es6')
 
 var getLinkSync     = deasync( spore.getLink );
 
-var update = function() {
+var update = function( config ) {
+  var pkg = require('./package.es6')( config );
   
   var names = _.keys( pkg.json.dependencies );
   

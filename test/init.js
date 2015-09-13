@@ -5,10 +5,20 @@ var tv4         = require('tv4');
 var fs          = require('fs-extra');
 
 var init        = require('../src/lib/init.es6');
-var working_dir = __dirname+'/scenarios/a';
+var scenarios   = require('./helpers/scenarios.js');
+var working_dir = __dirname+'/.scenarios/a';
 
 
 describe('init', function() {
+  
+  before( function() {
+    scenarios.setupAll();
+    scenarios.setup('a')
+  });
+  
+  after( function() {
+    scenarios.cleanup();
+  });
   
   it("should init the right spore.json", function(done){
     
