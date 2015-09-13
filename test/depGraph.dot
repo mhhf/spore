@@ -1,0 +1,8 @@
+digraph dependencies {
+  C -> B -> A;
+  D -> B;
+  D -> A;
+  F -> G;
+  G -> F;
+  E -> E;
+ }

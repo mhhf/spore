@@ -18,22 +18,7 @@ describe('datamodel', function() {
       "dependencies": {
         "owned": "QmT7uHnPpU6ALmSwFQT9mCw2tJGHNjg6fDdpLqYXGTtYiR"
       },
-      "contracts": {
-        "mortal": {
-          "abi": [
-            {
-              "constant": false,
-              "inputs": [],
-              "name": "kill",
-              "outputs": [],
-              "type": "function"
-            }
-          ],
-          "natspec": {
-            "methods": {}
-          }
-        }
-      },
+      "contracts": ['a'],
       "files": [
         "contracts/mortal.sol"
       ],

@@ -1,3 +1,5 @@
+"use strict";
+
 var fs          = require('fs-extra');
 var tv4         = require('tv4');
 var file        = require('file');

@@ -93,7 +93,6 @@ var compileContracts = function( files ) {
     return (/.*\.sol$/g).test( f ) 
   });
   
-  console.log(solFiles);
   // Handle Includes
   solFiles.forEach( ( path_to_file ) => { 
     
@@ -217,14 +216,12 @@ var publish = function(contract){
   
 
   var ipfsNode = publishFiles( json );
-  console.log('created');
   
   json.root = ipfsNode;
   
   // Compile Contracts
   var compiledContracts = compileContracts( json.files );
   
-  console.log('compiled');
   
   // pick the contracts specified in the json
   json.contracts = _.pick( compiledContracts, json.contracts );

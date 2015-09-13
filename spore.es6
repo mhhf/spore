@@ -1,3 +1,5 @@
+"use strict"; 
+
 var Pudding = require('ether-pudding')
 
 var docopt = require('docopt');
@@ -20,7 +22,7 @@ var spore = require('./src/contracts.json').contracts.Spore;
 
 // Setup Contract
 // Simple as Fuck Package mainanance
-var address = '0xe469ec100105d85a89a1f469a0355513ed69abbe';
+var address = '0xf8547bb87e48018eac009b14327a60341b3a913d';
 var abi = JSON.parse(spore['json-abi']);
 root.contract = Pudding.whisk( abi ).at( address );
 root.spore = web3.eth.contract(abi).at(address);
@@ -32,14 +34,15 @@ Usage:
   spore init
   spore publish 
   spore update
-  spore info   <package>
-  spore search <package>
-  spore install <package>
-  spore add    <path> 
-  spore rm     <package>
+  spore info      <package>
+  spore search    <package>
+  spore install   <package>
+  spore uninstall <package>
+  spore add       <path>
   
 Arguments:
   <package>                    Package name 
+  <path>                       path to file/ directory
   
 Options:
   --version                    Shows the Version of spore
@@ -47,14 +50,18 @@ Options:
 // --dep [<package>]            Package has to depend on <package>
 
 // TODO - Substitude this with process.env...
-var working_dir = process.argv[2];
+var working_dir = process.env.SPORE_WORKING_DIR;
 
 
-var application = docopt.docopt(doc, {argv: process.argv.slice(3), help: true, version: '0.0.1' });
+var application = docopt.docopt(doc, {argv: process.argv.slice(2), help: true, version: '0.0.1' });
 
 if( application.init ) { //===================================================== INIT
   
-  require('./src/lib/init.es6')();
+  // true fir cli
+  require('./src/lib/init.es6')( {
+    cli: true,
+    working_dir
+  });
     
 } else if( application.info ) { //============================================== INFO
   
@@ -78,6 +85,20 @@ if( application.init ) { //=====================================================
   
   require('./src/lib/add.es6')( working_dir + '/' + path_to_file );
 
+} else if( application.uninstall ) { //================================================ REMOVE
+  
+  var package_name = application['<package>'];
+  
+  require('./src/lib/uninstall.es6')( package_name );
+
+} else if( application.update ) {
+  
+  require('./src/lib/update.es6')( );
+
+} else if( application.status ) {
+
+  require('./src/lib/status.es6')( );
+  
 }
 
 
