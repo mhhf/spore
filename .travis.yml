@@ -2,6 +2,7 @@ language: node_js
 node_js:
 - 4.0.0
 before_script:
+- lsb_release -a
 - export GOPATH="${TRAVIS_BUILD_DIR}/Godeps/_workspace:$GOPATH"
 - export PATH="${TRAVIS_BUILD_DIR}/Godeps/_workspace/bin:$PATH"
 - go get -u github.com/ipfs/go-ipfs/cmd/ipfs
@@ -11,7 +12,6 @@ before_script:
 - testrpc &
 - sleep 5
 - npm i -g truffle
-- solc --version
 - npm run truffle
 script:
 - npm test
