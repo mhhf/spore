@@ -1,0 +1,9 @@
+{
+  "deploy": [
+    "Spore"
+  ],
+  "rpc": {
+    "host": "localhost",
+    "port": 8545
+  }
+}

@@ -15,11 +15,36 @@ var working_dir = __dirname+'/.scenarios/b';
 describe('spore#install', function() {
   
   before( function() {
+    
     scenarios.setupAll();
+    
+    var working_dir_a = __dirname+'/.scenarios/a';
+    
+    // PUBLISH A
+    scenarios.setup( 'a' )
+    init({
+      cli: false,
+      working_dir: working_dir_a
+    });
+    
+    var path_to_file = 'contracts/a.sol';
+    
+    add({
+      cli: false,
+      working_dir: working_dir_a,
+      path_to_file
+    });
+    
+    var hash = require('../src/lib/publish.es6')( {
+      cli: false,
+      working_dir: working_dir_a
+    });
+    
+    
     scenarios.setup( 'b', 'a' )
     init({
       cli: false,
-      working_dir
+      working_dir: working_dir
     });
   });
   

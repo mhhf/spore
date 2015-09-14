@@ -10,5 +10,6 @@ before_script:
 - ipfs daemon &
 - testrpc &
 - sleep 5
+- npm truffle
 script:
 - npm test
