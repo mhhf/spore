@@ -14,4 +14,4 @@ fi
 args=" $@"
 # args="$SPORE_WORKING_DIR $args"
 
-$SPORE_NPM_LOCATION/node_modules/.bin/babel-node -- $SPORE_NPM_LOCATION/spore.es6 ${args}
+node -- $SPORE_NPM_LOCATION/spore.es6 ${args}

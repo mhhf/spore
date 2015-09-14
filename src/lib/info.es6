@@ -1,14 +1,13 @@
 "use strict";
 
 var deasync         = require('deasync');
-
-var getLinkSync     = deasync( spore.getLink );
-var ipfsCatJsonSync = deasync( ipfs.catJson );
+var spore           = require('./spore.es6');
+var ipfs            = require('./ipfs.es6');
 
 var info = function( package_name ) {
   
-  var ipfsAddress = getLinkSync( package_name );
-  var json = ipfsCatJsonSync( ipfsAddress );
+  var ipfsAddress = spore.getLinkSync( package_name );
+  var json = ipfs.catJsonSync( ipfsAddress );
   
   console.log( JSON.stringify(json, false, 2) );
   

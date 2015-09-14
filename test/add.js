@@ -15,7 +15,7 @@ describe('spore#add', function() {
   before( function() {
     // var rnd = Math.floor(Math.random()*Math.pow(16,8)).toString(16);
     scenarios.setupAll();
-    scenarios.setup( 'a' )
+    scenarios.setup( 'a' );
     init({
       cli: false,
       working_dir
