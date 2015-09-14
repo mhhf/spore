@@ -10,7 +10,7 @@ var async       = require('async');
 
 var spore       = require('./spore.es6');
 
-var getLinkSync = deasync( spore.getLink );
+// var getLinkSync = deasync( spore.getLink );
 // var working_dir = process.argv[2];
 
 function Package( config ) {
@@ -68,7 +68,7 @@ function Package( config ) {
   }
   
 
-  var pkgDeps = _.clone( json.dependencies );
+  var pkgDeps = [];
   
   // Serialize the package Tree and check for problems
   // { NAME => ADDRESS }
@@ -98,31 +98,48 @@ function Package( config ) {
   }
   var serializeDepTreeSync = deasync( serializeDepTree );
   
-  var installDep = function( name ) {
+  
+
+
+
+
+
+
+
+
+  var installDep = function( config ) {
     
-    var ipfsAddress = getLinkSync( name );
-    
-    json.dependencies[name] = ipfsAddress;
-    
+    var ipfsAddress = spore.getLinkSync( config.package_name );
     let oldAddresses = _.values( json.dependencies );
     
-    var deps = serializeDepTreeSync( pkg.json.dependencies );
+    json.dependencies[ config.package_name ] = ipfsAddress;
+    
+    pkgDeps = _.clone( json.dependencies );
+    var deps = serializeDepTreeSync( json.dependencies );
     let newAddresses = _.values( deps );
 
     let toInstall = _.difference(newAddresses, oldAddresses);
 
     var depFs = toInstall.map( addr => {
       return ( cb ) => { 
-        var files = ipfs.mapAddressToFileSync( addr );
+        var json = ipfs.catJsonSync( addr );
+        var files = ipfs.mapAddressToFileSync( json.root );
         addToIgnore( _.keys(files) );
-        ipfs.checkoutFiles( files, cb );
+        ipfs.checkoutFiles( config.working_dir, files, cb );
       }
     });
 
     var parallelSync = deasync( async.parallel );
     var res = parallelSync(depFs);
-    
   }
+  
+
+
+
+
+
+
+
 
   return {
     json,

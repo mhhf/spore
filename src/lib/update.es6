@@ -4,8 +4,9 @@ var deasync         = require('deasync');
 var _               = require('underscore');
 
 var ipfs = require('./ipfs.es6')
+var spore = require('./spore.es6')
 
-var getLinkSync     = deasync( spore.getLink );
+// var getLinkSync     = deasync( spore.getLink );
 
 var update = function( config ) {
   var pkg = require('./package.es6')( config );
@@ -14,7 +15,7 @@ var update = function( config ) {
   
   var newDeps = names.map( name => {
     
-    let newLink = getLinkSync( name );
+    let newLink = spore.getLinkSync( name );
     let oldLink = pkg.json.dependencies[ name ];
     
     // return ( newLink != oldLink )? {name,newLink}: null;
@@ -41,9 +42,14 @@ var update = function( config ) {
   
   newDeps.forEach( o => {
     
-    pkg.installDep( name );
+    pkg.installDep({
+      working_dir: config.working_dir,
+      package_name: o.name
+    });
     
   });
+  
+  pkg.saveJson();
   
 };
 

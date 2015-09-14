@@ -7,11 +7,9 @@ var _               = require('underscore');
 
 var ipfs            = require('./ipfs.es6');
 
-var getLinkSync     = deasync( spore.getLink );
-
-var rm = function( config ) {
+var uninstall = function( config ) {
   
-  var pkg = require('./package.es6')( config.working_dir );
+  var pkg = require('./package.es6')( config );
   
   // check if package is installed
   pkg.assertDependency( config.package_name );
@@ -20,7 +18,8 @@ var rm = function( config ) {
   
   pkg.saveJson();
   
-  console.log(`Package "${package_name}" successful removed."`.green);
+  if( config.cli )
+    console.log(`Package "${config.package_name}" successful removed."`.green);
 
 }
-module.exports = rm;
+module.exports = uninstall;

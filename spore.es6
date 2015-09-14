@@ -74,13 +74,21 @@ if( application.init ) { //=====================================================
   
 } else if( application.publish ) { //=========================================== PUBLISH
   
-  require('./src/lib/publish.es6')(contract);
+  var hash = require('./src/lib/publish.es6')({
+    cli: true,
+    working_dir
+  });
+  
+  console.log( 'Package published: ' + hash );
  
 } else if( application.install ) { //=========================================== INSTALL
   
-  let name = application['<package>'];
+  let package_name = application['<package>'];
   
-  require( './src/lib/install.es6' )( name );
+  require( './src/lib/install.es6' )( {
+    package_name,
+    working_dir
+  } );
 
 } else if( application.add ) { //=============================================== ADD
   

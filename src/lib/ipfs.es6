@@ -14,10 +14,10 @@ function IPFS ( ) {
   ipfs.setProvider(require('ipfs-api')('localhost', '5001'));
   
 
-  var lsSync = deasync( ipfs.api.ls );
-  var catSync = deasync( ipfs.cat );
-
-
+  var lsSync         = deasync( ipfs.api.ls );
+  var catSync        = deasync( ipfs.cat );
+  var addSync        = deasync( ipfs.api.add );
+  var addJsonSync    = deasync( ipfs.addJson );
 
 
 
@@ -58,7 +58,7 @@ function IPFS ( ) {
 
 
 
-  var checkoutFiles = function( files, cb ) {
+  var checkoutFiles = function( working_dir, files, cb ) {
     
     _.each(files, ( hash, path ) => {
       
@@ -68,9 +68,8 @@ function IPFS ( ) {
       if( fs.existsSync( path ) ) {
         console.log(`File ${path} already exists.`.red);
       }
-      fs.writeFileSync( path, data );
+      fs.writeFileSync( working_dir + '/' + path, data );
       
-      console.log(`checkout ${path}`.green);
     });
     
     cb();
@@ -84,6 +83,8 @@ function IPFS ( ) {
 
   
   return {
+    addSync,
+    addJsonSync,
     lsSync,
     catSync,
     catJsonSync          : deasync( ipfs.catJson ),

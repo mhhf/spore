@@ -1,4 +1,5 @@
-var web3 = require('web3');
+var web3    = require('web3');
+var deasync = require('deasync');
 
 
 var Spore = function ( ){
@@ -13,8 +14,15 @@ var Spore = function ( ){
 
   var instance = web3.eth.contract(abi).at(address);
   
+  var getOwnerSync        = deasync( instance.getOwner );
+  var registerPackageSync = deasync( instance.registerPackage );
+  var getLinkSync         = deasync( instance.getLink );
+  
   return {
-    instance 
+    instance,
+    getOwnerSync,
+    getLinkSync,
+    registerPackageSync
   };
 }
 

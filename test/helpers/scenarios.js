@@ -25,7 +25,7 @@ var scenarios = function(){
         
       }
       
-      function ${name}_ {
+      function ${name}_ () {
         
       }
       

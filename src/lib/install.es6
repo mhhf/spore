@@ -8,13 +8,11 @@ var colors          = require('colors');
 var path            = require('path');
 var _               = require('underscore');
 
-
-var pkg = require('./package.es6');
-var ipfs = require('./ipfs.es6');
-
-var install = function( name ){
+var install = function( config ){
   
-  pkg.installDep( name );
+  var pkg = require('./package.es6')( config );
+  
+  pkg.installDep( config );
   
   pkg.saveJson();
 

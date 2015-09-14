@@ -7,20 +7,12 @@ var _                   = require('underscore');
 var path                = require('path');
 var web3                = require('web3');
 var deasync             = require('deasync');
-// https://github.com/ConsenSys/ipfs.js
-var ipfs                = require('ipfs-js');
+
+var ipfs                = require('./ipfs.es6');
+var spore               = require('./spore.es6');
 
 
-var getOwnerSync        = deasync( spore.getOwner );
-var registerPackageSync = deasync( spore.registerPackage );
-var ipfsAddSync         = deasync( ipfs.api.add );
-var ipfsAddJsonSync     = deasync( ipfs.addJson );
-
-
-var working_dir         = process.argv[2];
-
-// Setup IPFS
-ipfs.setProvider(require('ipfs-api')('localhost', '5001'));
+// var working_dir         = process.argv[2];
 
 
 var compileContract = function( code ) {
@@ -56,7 +48,7 @@ var addContractToJson = ( json, contracts ) => {
   
 };
 
-var compileContracts = function( files ) {
+var compileContracts = function( working_dir, files ) {
   
   // CONTRACT -> CODE
   var contracts      = {};
@@ -101,7 +93,7 @@ var compileContracts = function( files ) {
     if( contractsPath === "" ) contractsPath = path.dirname( path_to_file );
 
     // Copied from truffle
-    var code = fs.readFileSync(path_to_file, "utf-8");
+    var code = fs.readFileSync( working_dir + '/' + path_to_file, "utf-8");
     
     // Remove comments
     code = code.replace(/(\/\/.*(\n|$))/g, "");
@@ -138,9 +130,7 @@ var compileContracts = function( files ) {
 
 
 // external JSON
-var validateJson = function( json ) {
-  let isValide = tv4.validate( json, require('../user_spec.json') );
-  if( !isValide ) throw new Error( tv4.error );
+var validateJson = function( working_dir, json ) {
   
   let files = json.files;
   
@@ -162,7 +152,7 @@ var validateJson = function( json ) {
 
 
 // [PATH] -> IPFS_ROOT_HASH
-var publishFiles = function( json ) {
+var publishFiles = function( working_dir, json ) {
   
   // Create an ipfs dag node on folder
   if( !fs.existsSync( working_dir + '/.spore') ) 
@@ -172,7 +162,7 @@ var publishFiles = function( json ) {
     fs.copySync( working_dir + '/' + file, working_dir + '/.spore/build/' + file );
   });
   
-  var rootHash = ipfsAddSync( working_dir + "/.spore/build/", {"r": true} );
+  var rootHash = ipfs.addSync( working_dir + "/.spore/build/", {"r": true} );
   
   fs.removeSync( working_dir + '/.spore' );
  
@@ -185,7 +175,7 @@ var publishFiles = function( json ) {
 
 var addJsonToIPFS = function( json ) {
   
-  var jsonHash = ipfsAddJsonSync( json );
+  var jsonHash = ipfs.addJsonSync( json );
   
   return jsonHash;
   
@@ -194,7 +184,7 @@ var addJsonToIPFS = function( json ) {
 
 
 var assertOwnership = function( name ) {
-  var addr = getOwnerSync( name );
+  var addr = spore.getOwnerSync( name );
   if( addr != '0x0000000000000000000000000000000000000000' 
      && addr != web3.eth.defaultAccount ) 
    throw new Error(`Package with name ${json.name} is already owned by ${addr}`);
@@ -206,23 +196,28 @@ var assertOwnership = function( name ) {
 
 
 
-var publish = function(contract){
+var publish = function( config ){
+  
+  var pkg = require('./package.es6')( config );
+  
   
   // Check if spore.json has the right format
-  let json = JSON.parse(fs.readFileSync( working_dir + '/spore.json', 'utf8' ));
-  validateJson( json );
+  // let json = JSON.parse(fs.readFileSync( working_dir + '/spore.json', 'utf8' ));
+  validateJson( config.working_dir, pkg.json );
   
   
   // Check if name isn't taken, yet or the owner owns the package name
-  assertOwnership( json.name );
+  assertOwnership( pkg.json.name );
   
 
-  var ipfsNode = publishFiles( json );
+  var ipfsNode = publishFiles( config.working_dir, pkg.json );
+  
+  var json = _.clone( pkg.json );
   
   json.root = ipfsNode;
   
   // Compile Contracts
-  var compiledContracts = compileContracts( json.files );
+  var compiledContracts = compileContracts( config.working_dir, json.files );
   
   
   // pick the contracts specified in the json
@@ -241,11 +236,12 @@ var publish = function(contract){
   // });
   // 
   // Inform the user about the gas price
-  console.log('brace yourself, gas will be spend!');
+  if( config.cli )
+    console.log('brace yourself, gas will be spend!');
   
-  var tx = registerPackageSync( json.name, jsonHash );
+  var tx = spore.registerPackageSync( json.name, jsonHash );
   
-  console.log( 'Package published: ' + jsonHash );
+  return jsonHash;
   
 }
 
