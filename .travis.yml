@@ -10,6 +10,10 @@ before_script:
 - ipfs daemon &
 - testrpc &
 - sleep 5
+- npm i -g truffle
+- sudo add-apt-repository ppa:ethereum/ethereum
+- sudo apt-get update
+- sudo apt-get install cpp-ethereum
 - npm run truffle
 script:
 - npm test
