@@ -3,6 +3,8 @@
 
 **IMPORTANT: This is a proof of concept prototype and shouldn't be used in production**
 
+![](named_logo.png)
+
 
 For fast development of DApps a package management is needed. 
 Spore is a Proof of Concept prototype for a such package manager build on top of truffle, ethereum and ipfs.
