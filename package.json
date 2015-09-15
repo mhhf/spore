@@ -9,7 +9,6 @@
   },
   "scripts": {
     "test": "mocha test",
-    "solc": "solc --input-file src/contracts/spore.sol --combined-json json-abi,natspec-dev,natspec-user > src/contracts.json",
     "truffle": "truffle deploy -e production"
   },
   "keywords": [
