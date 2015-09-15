@@ -36,7 +36,7 @@ clone this repo:
 install:
 ```
 cd spore
-npm install --dev
+npm install
 npm link
 ```
 
