@@ -17,8 +17,8 @@ var init = function( config ) {
   var desc = '';
   
   if( config.cli ) {
-    name = readlineSync.question(`Name of your project [${tmpProjectName}]:`);
-    version = readlineSync.question(`Version [0.1.0]:`);
+    name = readlineSync.question(`Name of your project [${tmpProjectName}]:`) || name;
+    version = readlineSync.question(`Version [0.1.0]:`) || '0.1.0';
     desc = readlineSync.question(`Package description :`);
   }
   

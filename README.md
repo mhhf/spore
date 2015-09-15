@@ -14,6 +14,12 @@ Any form on Feedback and contribution is highly wellcome.
 ## Installation
 This will guide you trough a **local** development installation. The contract is not deployed on a global chain, yet.
 
+Make sure you have node v4+ installed:
+```
+$ node --version
+v4.0.0
+```
+
 Make sure you have [solidity](https://github.com/ethereum/cpp-ethereum/wiki) installed:
 
 ```
