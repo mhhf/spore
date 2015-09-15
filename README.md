@@ -40,15 +40,14 @@ npm install --dev
 npm link
 ```
 
+Deploy the spore ethereum contract with: `npm run truffle`
+
 ## Usage
 Run your local ipfs node and rpc client in seperate terminals:
 ```
 ipfs daemon
 testrpc
 ```
-
-Deploy the spore ethereum contract with: `npm run truffle`
-
 
 ```
 $ spore --help
