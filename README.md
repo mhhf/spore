@@ -72,5 +72,47 @@ Options:
   -h, --help                   Shows this Help Screen
 ```
 
+### Workflow
+Create a new project:
+```
+mkdir mypackage 
+cd mypackage
+truffle init
+spore init
+```
+
+this will create a spore.json in your root project directory:
+```
+{
+  "name": "mypackage",
+  "version": "0.1.0",
+  "description": "description",
+  "dependencies": {},
+  "contracts": [],
+  "ignore": [],
+  "files": []
+}
+```
+
+install dependencies:
+```
+spore install LinkedList
+spore install mortal
+```
+
+add some files:
+```
+spore add contracts/mycontract.sol
+spore add readme.md
+```
+
+publish the package:
+```
+spore publish
+```
+
+Now you can install the package `new` along with it's dependencies in another project via:
+`spore install new`
+
 ## Test
 `npm test`
