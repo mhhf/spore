@@ -26,7 +26,6 @@
     "colors": "^1.1.2",
     "deasync": "^0.1.1",
     "docopt": "^0.6.2",
-    "ether-pudding": "^0.10.0",
     "file": "^0.2.2",
     "fs-extra": "^0.24.0",
     "ipfs-api": "^2.3.0",
