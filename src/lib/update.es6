@@ -2,14 +2,12 @@
 
 var deasync         = require('deasync');
 var _               = require('underscore');
-
-var ipfs = require('./ipfs.es6')
-var spore = require('./spore.es6')
-
-// var getLinkSync     = deasync( spore.getLink );
+var SPORE           = require('./spore.es6');
 
 var update = function( config ) {
+  
   var pkg = require('./package.es6')( config );
+  var spore = SPORE( config.eth_host, config.eth_port, config.spore_address );
   
   var names = _.keys( pkg.json.dependencies );
   

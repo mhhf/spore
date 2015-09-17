@@ -8,9 +8,12 @@ var path                = require('path');
 var web3                = require('web3');
 var deasync             = require('deasync');
 
-var ipfs                = require('./ipfs.es6');
-var spore               = require('./spore.es6');
+// var ipfs                = require('./ipfs.es6');
+// var spore               = require('./spore.es6');
+var SPORE           = require('./spore.es6');
+var IPFS            = require('./ipfs.es6');
 
+var ipfs, spore;
 
 // var working_dir         = process.argv[2];
 
@@ -197,6 +200,10 @@ var assertOwnership = function( name ) {
 
 
 var publish = function( config ){
+  
+
+  ipfs = IPFS( config.ipfs_host, config.ipfs_port );
+  spore = SPORE( config.eth_host, config.eth_port, config.spore_address );
   
   var pkg = require('./package.es6')( config );
   

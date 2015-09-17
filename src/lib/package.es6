@@ -4,16 +4,20 @@ var fs          = require('fs-extra');
 var tv4         = require('tv4');
 var colors      = require('colors');
 var _           = require('underscore');
-var ipfs        = require('./ipfs.es6');
+// var ipfs        = require('./ipfs.es6');
 var deasync     = require('deasync');
 var async       = require('async');
 
-var spore       = require('./spore.es6');
+var SPORE           = require('./spore.es6');
+var IPFS            = require('./ipfs.es6');
 
 // var getLinkSync = deasync( spore.getLink );
 // var working_dir = process.argv[2];
 
 function Package( config ) {
+  
+  var spore = SPORE( config.eth_host, config.eth_port, config.spore_address );
+  var ipfs = IPFS( config.ipfs_host, config.ipfs_port );
 
   // check if package is installed
   // Check if spore.json has the right format

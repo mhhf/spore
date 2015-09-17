@@ -5,8 +5,6 @@ var colors          = require('colors');
 var path            = require('path');
 var _               = require('underscore');
 
-var ipfs            = require('./ipfs.es6');
-
 var uninstall = function( config ) {
   
   var pkg = require('./package.es6')( config );
