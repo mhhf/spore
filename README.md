@@ -11,7 +11,7 @@ Spore is a Proof of Concept prototype for a such package manager build on top of
 
 Any form on Feedback and contribution is highly wellcome.
 
-## Installation on ConsenSys testnet
+## Installation
 
 Make sure you have node v4+ installed:
 ```
@@ -23,12 +23,12 @@ Install [ipfs](https://ipfs.io/docs/install/).
 
 Install via: `npm i -g eth-spore`
 
-Configure spore with `spore --help` and point it to your consensys-testnet rpc node.
-The contract is located at **0x47aaaad8b87f3224e0ed566fc3e8282673c5f610**.
+On your first run spore will guide you trough a eth-rpc and ipfs configuration.
+Currently a contract is located at **0x47aaaad8b87f3224e0ed566fc3e8282673c5f610** on the ConsenSys testnet.
 
 
 ## Usage
-Run your local ipfs node and rpc client in seperate terminals:
+Run your local ipfs gateway and rpc client in seperate terminals:
 ```
 ipfs daemon
 ```
