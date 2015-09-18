@@ -43,7 +43,7 @@ var env = require( home + '/.spore.json' );
 var app = docopt.docopt(doc, {
   argv: process.argv.slice(2),
   help: true,
-  version: '0.0.2' 
+  version: '0.0.3' 
 });
 
 // TODO - refactor this mess
