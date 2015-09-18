@@ -126,3 +126,37 @@ spore install new
 
 ## Test
 `npm test`
+
+## How it works
+[This](https://github.com/mhhf/spore/blob/master/contracts/Spore.sol) Ethereum contract has a ` name => ipfs-hash ` mapping and some functionallity to access and manipulate it.
+
+The ipfs-hash is pointing to a package-header which specified by [this](https://github.com/mhhf/spore/blob/master/src/ipfs_spec.json) json schema.
+An example header for `mypackage` is:
+```
+{
+  "name": "mypackage",
+  "version": "0.1.0",
+  "description": "description",
+  "dependencies": {
+    "LinkedList": "QmYSigzKBexCogT6Nsmpz89qJUYYMZgZu8bmxejyf6AkAk",
+    "mortal": "QmPtcRBPrTdV47s6iBTYcM72w6VmB3KmJ2VnyW1Zy3eu6A"
+  },
+  "contracts": {
+    "Example": {
+      "abi": [
+        {
+          "inputs": [],
+          "type": "constructor"
+        }
+      ],
+      "natspec": {
+        "methods": {}
+      }
+    }
+  },
+  "root": "QmYJikcCRVKKLjLJpg6mYCeyNpobLZFijLwE4gM8iS6mRw"
+}
+```
+
+The *dependencies* property contains packages with their ipfs header file.
+The *root* property points to a ipfs directory node which contains the package files.

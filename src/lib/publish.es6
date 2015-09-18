@@ -98,10 +98,10 @@ var publish = function( config ){
       // Copied from truffle
       var code = fs.readFileSync( working_dir + '/' + path_to_file, "utf-8");
       
-      // Remove comments
-      code = code.replace(/(\/\/.*(\n|$))/g, "");
-      code = code.replace(/(\/\*(.|\n)*?\*\/)/g, "");
-      code = code.replace("*/", ""); // Edge case.
+      // Remove comments - removing the comments also removes 
+      // code = code.replace(/(\/\/.*(\n|$))/g, "");
+      // code = code.replace(/(\/\*(.|\n)*?\*\/)/g, "");
+      // code = code.replace("|)}>#", ""); // Edge case.
       
       contracts[ path.basename(path_to_file) ] = code;
       imported[ path.basename(path_to_file) ] = false;
