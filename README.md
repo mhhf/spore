@@ -56,6 +56,11 @@ Options:
   -h, --help                   Shows this Help Screen
 ```
 
+## GUI
+
+To it here for awesomeness (remember to set your ipfs cros settings correct): 
+`http://localhost:8080/ipfs/QmVdS8wJFFrcibvLnTZ7P33rN9LrhbujHpryAHkmfpX37e/`
+
 ### Workflow
 Create a new project:
 ```
