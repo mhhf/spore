@@ -16,7 +16,7 @@ chai.should();
 var working_dir = __dirname+'/.scenarios/a';
 
 var home = process.env.HOME || process.env.USERPROFILE;
-var env = require( home + '/.sporerc.json' );
+var env = require( home + '/.spore.json' );
 var cfg = CONFIG( env );
 var config;
 
