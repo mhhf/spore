@@ -49,7 +49,7 @@ npm link
 ```
 Run your rpc client( In this case testrpc `testrpc` )
 
-Deploy the spore ethereum contract with: `npm run truffle`
+Deploy the spore ethereum contract with: `truffle deploy`
 
 ## Usage
 Run your local ipfs node and rpc client in seperate terminals:
@@ -125,7 +125,14 @@ spore install new
 ```
 
 ## Test
-`npm test`
+Run a local chain:
+`testrpc`
+
+Deploy the contract:
+`truffle deploy`
+
+Run the test:
+`mocha test`
 
 ## How it works
 [This](https://github.com/mhhf/spore/blob/master/contracts/Spore.sol) Ethereum contract has a ` name => ipfs-hash ` mapping and some functionallity to access and manipulate it.

@@ -4,7 +4,7 @@ var deasync         = require('deasync');
 
 var info = function( config ) {
   
-  var ipfsAddress = config.spore.getLinkSync( config['<package>'] );
+  var ipfsAddress = config.spore.getLinkSync( config.package_name );
   var json = config.ipfs.catJsonSync( ipfsAddress );
   
   return json;

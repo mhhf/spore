@@ -231,7 +231,7 @@ var publish = function( config ){
   if( config.cli )
     console.log('brace yourself, gas will be spend!');
   
-  var tx = config.spore.registerPackageSync( json.name, jsonHash );
+  var tx = config.spore.registerPackageSync( json.name, jsonHash, { gas: 300000 } );
   
   return jsonHash;
   
