@@ -1,5 +1,5 @@
 {
-  "name": "spore",
+  "name": "eth-spore",
   "version": "0.0.1",
   "description": "Spore - Simple package manager for Ethereum",
   "preferGlobal": true,

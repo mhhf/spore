@@ -11,10 +11,7 @@ Spore is a Proof of Concept prototype for a such package manager build on top of
 
 Any form on Feedback and contribution is highly wellcome.
 
-
-
-## Installation
-This will guide you trough a **local** development installation. The contract is not deployed on a global chain, yet.
+## Installation on ConsenSys testnet
 
 Make sure you have node v4+ installed:
 ```
@@ -22,34 +19,13 @@ $ node --version
 v4.0.0
 ```
 
-Make sure you have [solidity](https://github.com/ethereum/cpp-ethereum/wiki) installed:
-
-```
-$ solc --version
-solc, the solidity compiler commandline interface
-Version: 0.1.1-ed7a8a35/Release-Darwin/clang/JIT
-```
-
-Install [eth-testrpc](https://github.com/ConsenSys/eth-testrpc) for testing/ dev purposes.
-`pip install eth-testrpc`
-
-Install [truffle](https://github.com/ConsenSys/truffle).
-`npm install -g truffle`
-
 Install [ipfs](https://ipfs.io/docs/install/).
 
-clone this repo:
-`git clone https://github.com/mhhf/spore.git`
+Install via: `npm i -g eth-spore`
 
-install:
-```
-cd spore
-npm install
-npm link
-```
-Run your rpc client( In this case testrpc `testrpc` )
+Configure spore with `spore --help` and point it to your consensys-testnet rpc node.
+The contract is located at **0x47aaaad8b87f3224e0ed566fc3e8282673c5f610**.
 
-Deploy the spore ethereum contract with: `truffle deploy`
 
 ## Usage
 Run your local ipfs node and rpc client in seperate terminals:
@@ -123,6 +99,46 @@ Now you can install the package `mypackage` along with it's dependencies in anot
 ```
 spore install new
 ```
+
+
+## Development - Installation
+This will guide you trough a **local** development installation. The contract is not deployed on a global chain, yet.
+
+Make sure you have node v4+ installed:
+```
+$ node --version
+v4.0.0
+```
+
+Make sure you have [solidity](https://github.com/ethereum/cpp-ethereum/wiki) installed:
+
+```
+$ solc --version
+solc, the solidity compiler commandline interface
+Version: 0.1.1-ed7a8a35/Release-Darwin/clang/JIT
+```
+
+Install [eth-testrpc](https://github.com/ConsenSys/eth-testrpc) for testing/ dev purposes.
+`pip install eth-testrpc`
+
+Install [truffle](https://github.com/ConsenSys/truffle).
+`npm install -g truffle`
+
+Install [ipfs](https://ipfs.io/docs/install/).
+
+clone this repo:
+`git clone https://github.com/mhhf/spore.git`
+
+install:
+```
+cd spore
+npm install
+npm link
+```
+Run your rpc client( In this case testrpc `testrpc` )
+
+Deploy the spore ethereum contract with: `truffle deploy`
+
 
 ## Test
 Run a local chain:

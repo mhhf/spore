@@ -6,7 +6,7 @@ fi
 
 if [ -z "$SPORE_NPM_LOCATION" ];
 then
-  export SPORE_NPM_LOCATION=$(npm config --global get prefix)/lib/node_modules/spore/
+  export SPORE_NPM_LOCATION=$(npm config --global get prefix)/lib/node_modules/eth-spore/
 fi
 
 # Hack. babel-node will clobber -e, and it doesn't look like `--` will stop it.
