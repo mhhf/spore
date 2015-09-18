@@ -119,8 +119,10 @@ publish the package:
 spore publish
 ```
 
-Now you can install the package `new` along with it's dependencies in another project via:
-`spore install new`
+Now you can install the package `mypackage` along with it's dependencies in another project via:
+```
+spore install new
+```
 
 ## Test
 `npm test`
