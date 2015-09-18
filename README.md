@@ -90,7 +90,7 @@ spore init
 ```
 
 this will create a spore.json in your root project directory:
-```
+```js
 {
   "name": "mypackage",
   "version": "0.1.0",
@@ -132,7 +132,7 @@ spore install new
 
 The ipfs-hash is pointing to a package-header which specified by [this](https://github.com/mhhf/spore/blob/master/src/ipfs_spec.json) json schema.
 An example header for `mypackage` is:
-```
+```js
 {
   "name": "mypackage",
   "version": "0.1.0",
