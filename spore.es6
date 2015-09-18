@@ -1,8 +1,10 @@
 "use strict"; 
 
 var docopt = require('docopt');
-var fs = require('fs-extra');
-var _ = require('underscore');
+var fs     = require('fs-extra');
+var _      = require('underscore');
+var PKG    = require('./src/lib/package.es6');
+var CONFIG = require( './src/lib/config.es6' );
 
 var doc = `
 Simple package management for Ethereum
@@ -32,9 +34,11 @@ var working_dir = process.env.SPORE_WORKING_DIR;
 
 
 var home = process.env.HOME || process.env.USERPROFILE;
+
 if( !fs.existsSync( home + '/.spore.json' ) ) {
   require('./src/lib/setup.es6')();
 }
+var env = require( home + '/.sporerc.json' );
 
 var app = docopt.docopt(doc, {
   argv: process.argv.slice(2),
@@ -42,8 +46,12 @@ var app = docopt.docopt(doc, {
   version: '0.0.1' 
 });
 
-var config = require( home + '/.sporerc.json' );
-_.extend( config, app, { cli: true, working_dir } );
+// TODO - refactor this mess
+var cfg    = CONFIG( env );
+var pkg    = PKG( _.extend(cfg, {working_dir}) );
+var config = _.extend( {}, cfg, app, { cli: true, pkg } );
+
+// var config = require( home + '/.sporerc.json' );
 
 if( app.init ) { //===================================================== INIT
   
@@ -55,7 +63,9 @@ if( app.init ) { //===================================================== INIT
   
   let package_name = app['<package>'];
   
-  require('./src/lib/info.es6')( _.extend(config, {package_name}) );
+  var json = require('./src/lib/info.es6')( _.extend(config, {package_name}) );
+
+  console.log( JSON.stringify(json, false, 2) );
   
 } else if( app.publish ) { //=========================================== PUBLISH
   

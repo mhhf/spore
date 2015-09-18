@@ -7,22 +7,29 @@ var _           = require('underscore');
 var add         = require('../src/lib/add.es6')
 var init        = require('../src/lib/init.es6');
 var scenarios   = require('./helpers/scenarios.js');
+var PKG         = require('../src/lib/package.es6');
 
 chai.should();
 var working_dir = __dirname+'/.scenarios/a';
 var home = process.env.HOME || process.env.USERPROFILE;
-var config = require( home + '/.sporerc.json' );
+var env = require( home + '/.sporerc.json' );
+var config = require( '../src/lib/config.es6' )( env );
 
 describe('spore#add', function() {
   
+  
   before( function() {
-    // var rnd = Math.floor(Math.random()*Math.pow(16,8)).toString(16);
+    
     scenarios.setupAll();
     scenarios.setup( 'a' );
     init({
       cli: false,
       working_dir
     });
+    
+    var pkg = PKG( _.extend({}, config, {working_dir}) );
+    _.extend( config, {pkg} );
+    
   });
   
   after( function() {

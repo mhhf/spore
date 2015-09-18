@@ -4,20 +4,10 @@ var fs          = require('fs-extra');
 var tv4         = require('tv4');
 var colors      = require('colors');
 var _           = require('underscore');
-// var ipfs        = require('./ipfs.es6');
 var deasync     = require('deasync');
 var async       = require('async');
 
-var SPORE           = require('./spore.es6');
-var IPFS            = require('./ipfs.es6');
-
-// var getLinkSync = deasync( spore.getLink );
-// var working_dir = process.argv[2];
-
 function Package( config ) {
-  
-  var spore = SPORE( config.eth_host, config.eth_port, config.spore_address );
-  var ipfs = IPFS( config.ipfs_host, config.ipfs_port );
 
   // check if package is installed
   // Check if spore.json has the right format
@@ -49,9 +39,9 @@ function Package( config ) {
     
     var ipfsAddress = getDependencyLink( name );
 
-    var pkgJson = ipfs.catJsonSync( ipfsAddress );
+    var pkgJson = config.ipfs.catJsonSync( ipfsAddress );
 
-    var files = _.keys(ipfs.mapAddressToFileSync( pkgJson.root ));
+    var files = _.keys(config.ipfs.mapAddressToFileSync( pkgJson.root ));
 
     files.forEach( path => {
 
@@ -88,7 +78,7 @@ function Package( config ) {
       return false;
     }).map( name => {
       return (cb) => {
-        var deps_ = ipfs.catJsonSync( deps[name] ).dependencies;
+        var deps_ = config.ipfs.catJsonSync( deps[name] ).dependencies;
         serializeDepTree( deps_, (err, res) => {
           cb(err, res);
         } );
@@ -111,12 +101,12 @@ function Package( config ) {
 
 
 
-  var installDep = function( config ) {
+  var installDep = function( opt ) {
     
-    var ipfsAddress = spore.getLinkSync( config.package_name );
+    var ipfsAddress = config.spore.getLinkSync( opt.package_name );
     let oldAddresses = _.values( json.dependencies );
     
-    json.dependencies[ config.package_name ] = ipfsAddress;
+    json.dependencies[ opt.package_name ] = ipfsAddress;
     
     pkgDeps = _.clone( json.dependencies );
     var deps = serializeDepTreeSync( json.dependencies );
@@ -126,10 +116,10 @@ function Package( config ) {
 
     var depFs = toInstall.map( addr => {
       return ( cb ) => { 
-        var json = ipfs.catJsonSync( addr );
-        var files = ipfs.mapAddressToFileSync( json.root );
+        var json = config.ipfs.catJsonSync( addr );
+        var files = config.ipfs.mapAddressToFileSync( json.root );
         addToIgnore( _.keys(files) );
-        ipfs.checkoutFiles( config.working_dir, files, cb );
+        config.ipfs.checkoutFiles( opt.working_dir, files, cb );
       }
     });
 
@@ -137,7 +127,6 @@ function Package( config ) {
     var res = parallelSync(depFs);
   }
   
-
 
 
 

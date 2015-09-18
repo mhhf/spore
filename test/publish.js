@@ -8,12 +8,17 @@ var add         = require('../src/lib/add.es6');
 var init        = require('../src/lib/init.es6');
 var scenarios   = require('./helpers/scenarios.js');
 
+var PKG         = require('../src/lib/package.es6');
+var CONFIG      = require( '../src/lib/config.es6' );
+
 chai.should();
 
 var working_dir = __dirname+'/.scenarios/a';
 
 var home = process.env.HOME || process.env.USERPROFILE;
-var config = require( home + '/.sporerc.json' );
+var env = require( home + '/.sporerc.json' );
+var cfg = CONFIG( env );
+var config;
 
 describe('spore#publish', function() {
   
@@ -26,6 +31,9 @@ describe('spore#publish', function() {
     });
     
     var path_to_file = 'contracts/a.sol';
+    
+    var pkg = PKG( _.extend({}, cfg, {working_dir}) );
+    config = _.extend( {}, cfg, {pkg} );
     
     add(_.extend({
       cli: false,
