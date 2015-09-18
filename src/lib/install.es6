@@ -10,11 +10,9 @@ var _               = require('underscore');
 
 var install = function( config ){
   
-  var pkg = require('./package.es6')( config );
+  config.pkg.installDep( config );
   
-  pkg.installDep( config );
-  
-  pkg.saveJson();
+  config.pkg.saveJson();
 
 };
 

@@ -2,14 +2,15 @@ var web3    = require('web3');
 var deasync = require('deasync');
 
 
-var Spore = function ( ){
+var Spore = function ( host, port, address ){
+  // var settings = require("../../config/app.json");
   
-  web3.setProvider(new web3.providers.HttpProvider('http://localhost:8545'));
+  web3.setProvider(new web3.providers.HttpProvider(`http://${host}:${port}`));
   web3.eth.defaultAccount = web3.eth.coinbase;
 
   var sporeContract = require('../../config/production/contracts.json').Spore;
 
-  var address = sporeContract.address;
+  // var address = sporeContract.address;
   var abi = sporeContract['abi'];
 
   var instance = web3.eth.contract(abi).at(address);
@@ -26,4 +27,4 @@ var Spore = function ( ){
   };
 }
 
-module.exports = Spore();
+module.exports = Spore;

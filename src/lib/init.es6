@@ -34,8 +34,6 @@ var init = function( config ) {
   };
   
   fs.writeFileSync( config.working_dir + '/spore.json', JSON.stringify( json, false, 2 ));
-  if( config.cli )
-    console.log('\ninit spore');
 }
 
 module.exports = init;

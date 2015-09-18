@@ -1,6 +1,10 @@
 "use strict"; 
 
 var docopt = require('docopt');
+var fs     = require('fs-extra');
+var _      = require('underscore');
+var PKG    = require('./src/lib/package.es6');
+var CONFIG = require( './src/lib/config.es6' );
 
 var doc = `
 Simple package management for Ethereum
@@ -28,72 +32,73 @@ Options:
 // TODO - Substitude this with process.env...
 var working_dir = process.env.SPORE_WORKING_DIR;
 
-var application = docopt.docopt(doc, {
+
+var home = process.env.HOME || process.env.USERPROFILE;
+
+if( !fs.existsSync( home + '/.spore.json' ) ) {
+  require('./src/lib/setup.es6')();
+}
+var env = require( home + '/.sporerc.json' );
+
+var app = docopt.docopt(doc, {
   argv: process.argv.slice(2),
   help: true,
   version: '0.0.1' 
 });
 
-if( application.init ) { //===================================================== INIT
+// TODO - refactor this mess
+var cfg    = CONFIG( env );
+var pkg    = PKG( _.extend(cfg, {working_dir}) );
+var config = _.extend( {}, cfg, app, { cli: true, pkg } );
+
+// var config = require( home + '/.sporerc.json' );
+
+if( app.init ) { //===================================================== INIT
   
   // true fir cli
-  require('./src/lib/init.es6')( {
-    cli: true,
-    working_dir
-  });
+  require('./src/lib/init.es6')( config );
+  console.log('\ninit spore');
     
-} else if( application.info ) { //============================================== INFO
+} else if( app.info ) { //============================================== INFO
   
-  var package_name = application['<package>'];
+  let package_name = app['<package>'];
   
-  require('./src/lib/info.es6')( package_name );
+  var json = require('./src/lib/info.es6')( _.extend(config, {package_name}) );
+
+  console.log( JSON.stringify(json, false, 2) );
   
-} else if( application.publish ) { //=========================================== PUBLISH
+} else if( app.publish ) { //=========================================== PUBLISH
   
-  var hash = require('./src/lib/publish.es6')({
-    cli: true,
-    working_dir
-  });
+  var hash = require('./src/lib/publish.es6')( config );
   
   console.log( 'Package published: ' + hash );
  
-} else if( application.install ) { //=========================================== INSTALL
+} else if( app.install ) { //=========================================== INSTALL
   
-  let package_name = application['<package>'];
+  let package_name = app['<package>'];
   
-  require( './src/lib/install.es6' )( {
-    package_name,
-    working_dir
-  } );
+  require( './src/lib/install.es6' )( _.extend( config, {package_name}) );
 
-} else if( application.add ) { //=============================================== ADD
+} else if( app.add ) { //=============================================== ADD
   
-  let path_to_file = application['<path>'];
+  let path_to_file = app['<path>'];
   
-  require('./src/lib/add.es6')( {
-    working_dir,
-    path_to_file
-  });
+  require('./src/lib/add.es6')( _.extend( config, {path_to_file} ) );
 
-} else if( application.uninstall ) { //========================================= UNINSTALL
+} else if( app.uninstall ) { //========================================= UNINSTALL
   
-  var package_name = application['<package>'];
+  var package_name = app['<package>'];
   
-  require('./src/lib/uninstall.es6')( {
-    working_dir,  
-    package_name 
-  });
+  require('./src/lib/uninstall.es6')( _.extend( config, { package_name } ) );
 
-} else if( application.update ) { //============================================ UPDATE
+} else if( app.update ) { //============================================ UPDATE
   
-  require('./src/lib/update.es6')({
-    working_dir
-  });
+  require('./src/lib/update.es6')( config );
 
-} else if( application.status ) { //============================================ STATUS
+} else if( app.status ) { //============================================ STATUS
 
   // TODO - implement
-  require('./src/lib/status.es6')( );
+  require('./src/lib/status.es6')( config );
   
 }
 

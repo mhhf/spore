@@ -5,18 +5,14 @@ var colors          = require('colors');
 var path            = require('path');
 var _               = require('underscore');
 
-var ipfs            = require('./ipfs.es6');
-
 var uninstall = function( config ) {
   
-  var pkg = require('./package.es6')( config );
-  
   // check if package is installed
-  pkg.assertDependency( config.package_name );
+  config.pkg.assertDependency( config.package_name );
   
-  pkg.removeDep( config.package_name );
+  config.pkg.removeDep( config.package_name );
   
-  pkg.saveJson();
+  config.pkg.saveJson();
   
   if( config.cli )
     console.log(`Package "${config.package_name}" successful removed."`.green);

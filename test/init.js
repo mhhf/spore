@@ -13,7 +13,7 @@ describe('init', function() {
   
   before( function() {
     scenarios.setupAll();
-    scenarios.setup('a')
+    scenarios.setup('a');
   });
   
   after( function() {

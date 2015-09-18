@@ -28,9 +28,8 @@ var getFileSet = function( config ){
 }
 
 
+// TODO pkg -> config.pkg
 var add = function( config ) {
-  
-  var pkg = require('./package.es6')( config );
   
   // Edge Cases
   if( !fs.existsSync( config.working_dir + '/' + config.path_to_file ) )
@@ -48,8 +47,8 @@ var add = function( config ) {
       let valide = 
         f != "" 
         && f != '/spore.json' // ignore spore.json
-        && pkg.json.files.indexOf( f ) == -1 // File already included
-        && pkg.json.ignore.indexOf( f ) == -1 // ignore files in json.ignore
+        && config.pkg.json.files.indexOf( f ) == -1 // File already included
+        && config.pkg.json.ignore.indexOf( f ) == -1 // ignore files in json.ignore
       
       return valide
          
@@ -73,18 +72,18 @@ var add = function( config ) {
   // Ask if to include contracts for publishing
   if( config.cli && contracts.length > 0 ) {
     var readlineSync = require('readline-sync');
-    let answer = readlineSync.question(`Include contracts: ${contracts} [y/n]`);
+    let answer = readlineSync.question(`Include contracts: ${contracts} [y/n]: `);
     includeContracts = (/^\s*y/g).test( answer );
   }
   
-  
   if( includeContracts ) {
-    pkg.json.contracts = _.uniq( pkg.json.contracts.concat( contracts ) )
+    config.pkg.json.contracts = _.uniq( config.pkg.json.contracts.concat( contracts ) )
   }
     
-  pkg.json.files = _.uniq( pkg.json.files.concat(files) );
-
-  pkg.saveJson();
+  config.pkg.json.files = _.uniq( config.pkg.json.files.concat(files) );
+  
+  
+  config.pkg.saveJson();
   
   
 }

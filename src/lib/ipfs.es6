@@ -5,19 +5,20 @@ var async           = require('async');
 var fs              = require('fs');
 var _               = require('underscore');
 
-function IPFS ( ) {
+function IPFS ( host, port ) {
    
   // https://github.com/ConsenSys/ipfs.js
   var ipfs = require('ipfs-js');
 
   // Setup IPFS
-  ipfs.setProvider(require('ipfs-api')('localhost', '5001'));
+  ipfs.setProvider( require('ipfs-api')( host, port ) );
   
 
   var lsSync         = deasync( ipfs.api.ls );
   var catSync        = deasync( ipfs.cat );
   var addSync        = deasync( ipfs.api.add );
   var addJsonSync    = deasync( ipfs.addJson );
+  var catJsonSync    = deasync( ipfs.catJson );
 
 
 
@@ -87,7 +88,7 @@ function IPFS ( ) {
     addJsonSync,
     lsSync,
     catSync,
-    catJsonSync          : deasync( ipfs.catJson ),
+    catJsonSync,
     mapAddressToFileSync,
     checkoutFiles
   }; 
@@ -95,4 +96,4 @@ function IPFS ( ) {
 }
 
 
-module.exports = IPFS();
+module.exports = IPFS;
