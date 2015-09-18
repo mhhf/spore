@@ -11,7 +11,7 @@ var init        = require('../src/lib/init.es6');
 var scenarios   = require('./helpers/scenarios.js');
 
 var home = process.env.HOME || process.env.USERPROFILE;
-var env = require( home + '/.sporerc.json' );
+var env = require( home + '/.spore.json' );
 var CONFIG = require( '../src/lib/config.es6' );
 var cfg = CONFIG( env );
 var config;

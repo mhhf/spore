@@ -38,7 +38,7 @@ var home = process.env.HOME || process.env.USERPROFILE;
 if( !fs.existsSync( home + '/.spore.json' ) ) {
   require('./src/lib/setup.es6')();
 }
-var env = require( home + '/.sporerc.json' );
+var env = require( home + '/.spore.json' );
 
 var app = docopt.docopt(doc, {
   argv: process.argv.slice(2),

@@ -20,7 +20,8 @@ var publish = function( config ){
 
   var compileContract = function( code ) {
     
-    var cmd = "echo \"" + code + "\"| solc --combined-json json-abi,natspec-dev";
+    
+    var cmd = "echo \"" + code.replace(/`/g,"\\`") + "\"| solc --combined-json json-abi,natspec-dev";
     var out = JSON.parse( child_process.execSync(cmd, {encoding:'utf8'})).contracts;
      
     let keys = Object.keys(out);

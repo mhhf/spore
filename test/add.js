@@ -12,7 +12,7 @@ var PKG         = require('../src/lib/package.es6');
 chai.should();
 var working_dir = __dirname+'/.scenarios/a';
 var home = process.env.HOME || process.env.USERPROFILE;
-var env = require( home + '/.sporerc.json' );
+var env = require( home + '/.spore.json' );
 var config = require( '../src/lib/config.es6' )( env );
 
 describe('spore#add', function() {
