@@ -12,7 +12,7 @@ var scenarios   = require('./helpers/scenarios.js');
 var CONFIG      = require('../src/lib/config.es6');
 
 var config = CONFIG({}, {cli: false});
-config.init();
+config.initAll();
 
 chai.should();
 

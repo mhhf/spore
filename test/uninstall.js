@@ -14,7 +14,7 @@ var working_dir = __dirname+'/.scenarios/b';
 
 
 var config = CONFIG({ working_dir }, {cli: false});
-config.init();
+config.initAll();
 
 describe('spore#uninstall', function() {
   

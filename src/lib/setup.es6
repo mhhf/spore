@@ -114,23 +114,5 @@ module.exports = function ( options ) {
     pingSpore,
     pingIpfs
   };
-
-  // var json = {
-  //   ipfs_host,
-  //   ipfs_port,
-  //   selected: name,
-  //   chains
-  // };
-  //
-  // if( testParameters() ) {
-  //   return json;
-  // } else {
-  //   if( options.cli ) {
-  //     process.exit();
-  //   } else {
-  //     throw new Error('could not establish connection');
-  //   }
-  //   
-  // }
   
 }

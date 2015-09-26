@@ -40,10 +40,6 @@ Options:
 // TODO - search 
 // spore search    <package>
 
-// TODO - chain management
-// spore list chains
-// spore set chain
-
 // --dep [<package>]            Package has to depend on <package>
 
 

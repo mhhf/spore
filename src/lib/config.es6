@@ -51,7 +51,7 @@ module.exports = function ( config, options ){
     cfg.pkg = PKG( cfg );
   }
   
-  cfg.init = function() {
+  cfg.initAll = function() {
     cfg.initSpore();
     cfg.initIpfs();
   }
