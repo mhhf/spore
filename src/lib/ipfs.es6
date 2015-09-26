@@ -2,7 +2,7 @@
 
 var deasync         = require('deasync');
 var async           = require('async');
-var fs              = require('fs');
+var fs              = require('fs-extra');
 var _               = require('underscore');
 
 function IPFS ( host, port ) {
@@ -69,7 +69,7 @@ function IPFS ( host, port ) {
       if( fs.existsSync( path ) ) {
         console.log(`File ${path} already exists.`.red);
       }
-      fs.writeFileSync( working_dir + '/' + path, data );
+      fs.outputFileSync( working_dir + '/' + path, data );
       
     });
     

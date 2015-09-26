@@ -49,7 +49,7 @@ function Package( config ) {
       if( index === -1 ) return null;
       json.ignore.splice( index, 1 );
 
-      fs.removeSync( path );
+      fs.removeSync( config.working_dir + '/' + path );
 
     });
 
@@ -97,13 +97,15 @@ function Package( config ) {
 
 
 
-
-
-
-
   var installDep = function( opt ) {
     
     var ipfsAddress = config.spore.getLinkSync( opt.package_name );
+    
+    if( ipfsAddress === "" ) { 
+      console.log(`no package ${opt.package_name} found.`.red);
+      process.exit();
+    }
+    
     let oldAddresses = _.values( json.dependencies );
     
     json.dependencies[ opt.package_name ] = ipfsAddress;

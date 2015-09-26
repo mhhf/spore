@@ -15,31 +15,22 @@ chai.should();
 
 var working_dir = __dirname+'/.scenarios/a';
 
-var home = process.env.HOME || process.env.USERPROFILE;
-var env = require( home + '/.spore.json' );
-var cfg = CONFIG( env );
-var config;
+var config = CONFIG({working_dir}, {cli: false});
+config.init();
 
 describe('spore#publish', function() {
   
   before( function() {
     scenarios.setupAll();
+    
     scenarios.setup( 'a' )
-    init({
-      cli: false,
-      working_dir
-    });
     
-    var path_to_file = 'contracts/a.sol';
+    init(config);
     
-    var pkg = PKG( _.extend({}, cfg, {working_dir}) );
-    config = _.extend( {}, cfg, {pkg} );
+    config.path_to_file = 'contracts/a.sol';
+    config.initPkg();
     
-    add(_.extend({
-      cli: false,
-      working_dir,
-      path_to_file
-    }, config));
+    add( config );
     
   });
   
@@ -49,10 +40,7 @@ describe('spore#publish', function() {
   
   it("should have the correct hash", function(done){
     
-    var hash = require('../src/lib/publish.es6')( _.extend({
-      cli: false,
-      working_dir
-    }, config));
+    var hash = require('../src/lib/publish.es6')( config );
     
     hash.should.eql('QmU1CxrGNyHA4idkExQgAi7JZmJ1f3zVfWpa76m7LPnBbK');
     
@@ -61,19 +49,13 @@ describe('spore#publish', function() {
   
   it("should be a different hash if something change", function(done){
     
-    var path_to_file = 'readme.md';
+    var path_to_file = config.path_to_file = 'readme.md';
+    
     fs.writeFileSync( working_dir + '/' + path_to_file, '# title' );
     
-    add(_.extend({
-      cli: false,
-      working_dir,
-      path_to_file
-    }, config));
+    add( config );
     
-    var hash = require('../src/lib/publish.es6')( _.extend({
-      cli: false,
-      working_dir
-    }, config));
+    var hash = require('../src/lib/publish.es6')( config );
     
     hash.should.not.eql('QmU1CxrGNyHA4idkExQgAi7JZmJ1f3zVfWpa76m7LPnBbK');
     

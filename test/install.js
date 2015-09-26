@@ -9,16 +9,12 @@ var PKG         = require('../src/lib/package.es6');
 var add         = require('../src/lib/add.es6');
 var init        = require('../src/lib/init.es6');
 var scenarios   = require('./helpers/scenarios.js');
+var CONFIG      = require('../src/lib/config.es6');
 
-var home = process.env.HOME || process.env.USERPROFILE;
-var env = require( home + '/.spore.json' );
-var CONFIG = require( '../src/lib/config.es6' );
-var cfg = CONFIG( env );
-var config;
+var config = CONFIG({}, {cli: false});
+config.init();
 
 chai.should();
-
-var working_dir = __dirname+'/.scenarios/b';
 
 describe('spore#install', function() {
   
@@ -26,41 +22,28 @@ describe('spore#install', function() {
     
     scenarios.setupAll();
     
-    var working_dir_a = __dirname+'/.scenarios/a';
+    config.working_dir =  __dirname+'/.scenarios/a';
     
     // PUBLISH A
-    scenarios.setup( 'a' )
-    init({
-      cli: false,
-      working_dir: working_dir_a
-    });
+    scenarios.setup( 'a' );
+    init( config );
     
-    var pkgA = PKG( _.extend({}, cfg, {working_dir: working_dir_a}) );
-    var configA = _.extend( {}, cfg, {pkg:pkgA} );
+    config.initPkg();
     
     
     var path_to_file = 'contracts/a.sol';
+    config.path_to_file = path_to_file;
     
-    add(_.extend({
-      cli: false,
-      working_dir: working_dir_a,
-      path_to_file
-    }, configA ) );
+    add( config );
     
-    var hash = require('../src/lib/publish.es6')( _.extend({
-      cli: false,
-      working_dir: working_dir_a
-    }, configA ) );
+    var hash = require('../src/lib/publish.es6')( config );
     
+    config.working_dir = __dirname+'/.scenarios/b';
     
     scenarios.setup( 'b', 'a' )
-    init( _.extend( {
-      cli: false,
-      working_dir: working_dir
-    }, cfg));
+    init( config );
     
-    var pkg = PKG( _.extend({}, cfg, {working_dir}) );
-    config = _.extend( {}, cfg, {pkg} );
+    config.initPkg();
 
   });
   
@@ -72,18 +55,12 @@ describe('spore#install', function() {
   it("should install a simple package", function(done){
     
     
-    require('../src/lib/install.es6')( _.extend({
-      working_dir,
-      package_name: 'a'
-    }, config));
-    
-    var pkg = require('../src/lib/package.es6')( _.extend({
-      working_dir
-    },config));
+    config.package_name = 'a';
+    require('../src/lib/install.es6')( config );
     
     // Should have a as a dependency
-    pkg.json.dependencies.should.have.a.property('a');
-    pkg.json.ignore.indexOf('contracts/a.sol').should.be.above(-1);
+    config.pkg.json.dependencies.should.have.a.property('a');
+    config.pkg.json.ignore.indexOf('contracts/a.sol').should.be.above(-1);
     
     done();
   });

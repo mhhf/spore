@@ -1,5 +1,6 @@
 var web3    = require('web3');
 var deasync = require('deasync');
+var colors  = require('colors');
 
 
 var Spore = function ( host, port, address ){
@@ -12,6 +13,11 @@ var Spore = function ( host, port, address ){
 
   // var address = sporeContract.address;
   var abi = sporeContract['abi'];
+  
+  if( web3.eth.getCode( address ) === "0x" ) {
+    console.log(`No Spore contract found at ${address}`.red);
+    process.exit();
+  }
 
   var instance = web3.eth.contract(abi).at(address);
   

@@ -9,11 +9,17 @@ var init        = require('../src/lib/init.es6');
 var scenarios   = require('./helpers/scenarios.js');
 var PKG         = require('../src/lib/package.es6');
 
-var home = process.env.HOME || process.env.USERPROFILE;
-var env = require( home + '/.spore.json' );
-var CONFIG = require( '../src/lib/config.es6' );
-var cfg = CONFIG( env );
-var config;
+var CONFIG      = require('../src/lib/config.es6');
+
+
+var working_dir_a_ = __dirname+'/.scenarios/a_';
+var working_dir_b  = __dirname+'/.scenarios/b';
+
+var configA = CONFIG({working_dir: working_dir_a_}, {cli: false});
+var configB = CONFIG({working_dir: working_dir_b}, {cli: false});
+configA.init();
+configB.init();
+
 
 chai.should();
 
@@ -24,87 +30,58 @@ describe('spore#update', function() {
     scenarios.setup( 'a_' );
     scenarios.setup( 'b', 'a_' );
     
-    var working_dir_a_ = __dirname+'/.scenarios/a_';
-    var working_dir_b  = __dirname+'/.scenarios/b';
     
     // init a
-    init({
-      cli: false,
-      working_dir: working_dir_a_
-    });
+    init( configA );
+    configA.initPkg();
     
-    var pkgA = PKG( _.extend({}, cfg, {working_dir: working_dir_a_}) );
-    var configA = _.extend( {}, cfg, {pkg:pkgA} );
     
-    var path_to_file = 'readme.md';
+    var path_to_file = configA.path_to_file = 'readme.md';
     var rnd = Math.floor(Math.random()*Math.pow(16,8)).toString(16);
     fs.writeFileSync( __dirname+'/.scenarios/a_' + '/' + path_to_file, '# title \n'+rnd );
     
+
+    
     // add contract
-    add(_.extend({
-      cli: false,
-      working_dir: working_dir_a_,
-      path_to_file: 'readme.md'
-    }, configA));
+    add( configA );
     
     
     // publish old a_
-    var hash = require('../src/lib/publish.es6')( _.extend({
-      cli: false,
-      working_dir: working_dir_a_
-    }, configA));
+    var hash = require('../src/lib/publish.es6')( configA );
     
     
     // INIT B <- old A
     // 
     // init b
-    init({
-      cli: false,
-      working_dir: working_dir_b
-    });
-    
-    var pkg = PKG( _.extend({}, cfg, {working_dir: working_dir_b}) );
-    config = _.extend( {}, cfg, {pkg} );
+    init( configB );
+    configB.initPkg();
     
     
+    configB.package_name = 'a_';
     // install a
-    require('../src/lib/install.es6')( _.extend({
-      working_dir: working_dir_b,
-      package_name: 'a_'
-    }, config));
+    require('../src/lib/install.es6')( configB );
     
     
-    var oldDep = config.pkg.json.dependencies['a_'];
+    var oldDep = configB.pkg.json.dependencies['a_'];
     
     // randomized new a
-    
-
-    var path_to_file = 'readme.md';
+    var path_to_file = configA.path_to_file = 'readme.md';
     var rnd = Math.floor(Math.random()*Math.pow(16,8)).toString(16);
     fs.writeFileSync( working_dir_a_ + '/' + path_to_file, '# title \n'+rnd );
     
     // add contract
-    add(_.extend({
-      cli: false,
-      working_dir: working_dir_a_,
-      path_to_file: 'readme.md'
-    }, configA));
+    add( configA );
     
     
     // publish new a
-    var hash = require('../src/lib/publish.es6')( _.extend({
-      cli: false,
-      working_dir: working_dir_a_
-    }, configA));
+    var hash = require('../src/lib/publish.es6')( configA );
     
     
     // UPDATE B
-    require('../src/lib/update.es6')(_.extend({
-      working_dir: working_dir_b
-    }, config));
+    require('../src/lib/update.es6')( configB );
     
     
-    var newDep = config.pkg.json.dependencies['a_'];
+    var newDep = configB.pkg.json.dependencies['a_'];
     
   });
 
@@ -114,9 +91,7 @@ describe('spore#update', function() {
   
   it("should update a simple package", function(done){
     
-    require('../src/lib/update.es6')(_.extend({
-      working_dir: __dirname+'/.scenarios/b'
-    }, config));
+    require('../src/lib/update.es6')( configB );
     
     done();
   });

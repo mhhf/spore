@@ -8,12 +8,19 @@ var add         = require('../src/lib/add.es6')
 var init        = require('../src/lib/init.es6');
 var scenarios   = require('./helpers/scenarios.js');
 var PKG         = require('../src/lib/package.es6');
+var CONFIG      = require('../src/lib/config.es6');
 
 chai.should();
-var working_dir = __dirname+'/.scenarios/a';
-var home = process.env.HOME || process.env.USERPROFILE;
-var env = require( home + '/.spore.json' );
-var config = require( '../src/lib/config.es6' )( env );
+
+
+
+
+var working_dir = __dirname + '/.scenarios/a';
+var config = CONFIG( { working_dir }, { cli: false } );
+
+// var home = process.env.HOME || process.env.USERPROFILE;
+// var env = require( home + '/.spore.json' );
+// var config = require( '../src/lib/config.es6' )( env );
 
 describe('spore#add', function() {
   
@@ -23,12 +30,11 @@ describe('spore#add', function() {
     scenarios.setupAll();
     scenarios.setup( 'a' );
     init({
-      cli: false,
+      // cli: false
       working_dir
     });
     
-    var pkg = PKG( _.extend({}, config, {working_dir}) );
-    _.extend( config, {pkg} );
+    config.initPkg();
     
   });
   
@@ -39,19 +45,14 @@ describe('spore#add', function() {
   it("should add a non contract file", function(done){
     
     var path_to_file = 'readme.md';
+    
     fs.writeFileSync( working_dir + '/' + path_to_file, '# title' );
     
-    add(_.extend({
-      cli: false,
-      working_dir,
-      path_to_file
-    }, config));
+    config.path_to_file = path_to_file;
     
-    var pkg = require('../src/lib/package.es6')( _.extend({
-      working_dir
-    }, config));
+    add( config );
     
-    pkg.json.files[0].should.eql( path_to_file );
+    config.pkg.json.files[0].should.eql( path_to_file );
     
     done();
   });
@@ -62,17 +63,11 @@ describe('spore#add', function() {
     
     var path_to_file = 'contracts/a.sol';
     
-    add( _.extend({
-      cli: false,
-      working_dir,
-      path_to_file
-    }, config));
+    config.path_to_file = path_to_file;
     
-    var pkg = require('../src/lib/package.es6')( _.extend({
-      working_dir
-    }, config));
+    add( config );
     
-    pkg.json.contracts[0].should.eql( 'a' );
+    config.pkg.json.contracts[0].should.eql( 'a' );
     
     done();
   });

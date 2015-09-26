@@ -232,6 +232,9 @@ var publish = function( config ){
     console.log('brace yourself, gas will be spend!');
   
   var tx = config.spore.registerPackageSync( json.name, jsonHash, { gas: 300000 } );
+
+  // var receipt = web3.eth.getTransactionReceipt( tx );
+  // console.log( receipt );
   
   return jsonHash;
   

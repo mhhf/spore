@@ -1,6 +1,10 @@
 {
   "type": "object",
   "properties": {
+    "pv": {
+      "type": "string",
+      "title": "Protocoll Version"
+    },
     "name": {
       "type": "string",
       "title": "name"
