@@ -1,9 +1,11 @@
 var _               = require('underscore');
 var fs              = require('fs');
 var SPORE           = require('./spore.es6');
+var Instance        = require('./instance.es6');
 var IPFS            = require('./ipfs.es6');
 var PKG             = require('./package.es6');
 var colors          = require('colors');
+var web3            = require('web3');
 
 
 var working_dir = process.env.SPORE_WORKING_DIR;
@@ -40,11 +42,30 @@ module.exports = function ( config, options ){
   
   cfg.initSpore = function() {
     var remote = cfg.selected;
-    cfg.spore = SPORE( cfg.chains[remote].host, cfg.chains[remote].port, cfg.chains[remote].address );
+    cfg.spore = SPORE( cfg, cfg.chains[remote].address );
   }
   
   cfg.initIpfs = function() {
     cfg.ipfs = IPFS( cfg.ipfs_host, cfg.ipfs_port );
+    try {
+      var res = cfg.ipfs.addJsonSync({});
+    } catch ( e ) {
+      console.log('Error: '.red + 'No IPFS connection could be established. Is the daemon running on localhost?');
+      process.exit();
+    }  
+  }
+  
+  var web3Init = false;
+  cfg.web3 = function() {
+    if( !web3Init ) {
+      var remote = cfg.selected;
+      var host = cfg.chains[remote].host;
+      var port = cfg.chains[remote].port;
+      web3.setProvider(new web3.providers.HttpProvider(`http://${host}:${port}`));
+      web3.eth.defaultAccount = web3.eth.coinbase;
+      web3Init = true;
+    }
+    return web3;
   }
   
   cfg.initPkg = function() {
@@ -69,6 +90,12 @@ module.exports = function ( config, options ){
     } else {
       console.log(`${name} is not a chain`.red);
     }
+  }
+  
+  var instance;
+  cfg.instance = function() {
+    if( !instance ) instance = Instance( cfg );
+    return instance;
   }
   
   cfg.removeChain = function( name ) {

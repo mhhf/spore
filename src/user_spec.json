@@ -25,7 +25,11 @@
     },
     "ignore": {
       "type": "array"
+    },
+    "tags": {
+      "type": "array"
     }
   },
-  "additionalProperties": false
+  "additionalProperties": false,
+  "required": ["name","description", "version", "dependencies","contracts", "files", "ignore", "tags"]
 }

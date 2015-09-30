@@ -1,43 +1,48 @@
-"use strict";
+var fs = require('fs-extra');
+var _  = require('underscore');
 
-var deasync         = require('deasync');
-var _               = require('underscore');
 
-var update = function( config ) {
+module.exports = function( config ) {
   
-  var names = _.keys( config.pkg.json.dependencies );
+  var obj = config.spore.getPackagesArraySync();
+  obj = _.invert( obj );
   
-  var newDeps = names.map( name => {
+  var npm_location = process.env.SPORE_NPM_LOCATION;
+  if( fs.existsSync( npm_location + '/db.json' ) ) {
+    var dbfile = fs.readFileSync( npm_location + 'db.json' );
+    var oldDb = JSON.parse(dbfile);
     
-    let newLink = config.spore.getLinkSync( name );
-    let oldLink = config.pkg.json.dependencies[ name ];
+    var oldKeys = Object.keys( oldDb );
+    var newKeys = Object.keys( obj );
+    var intersect = _.intersection(oldKeys, newKeys);
     
-    // return ( newLink != oldLink )? {name,newLink}: null;
-    return {name,newLink};
-  }).filter( o => o !== null );
+    intersect.forEach( hash => {
+      obj[hash] = oldDb[hash];
+    })
+    
+    var toGrab = _.difference( newKeys, intersect );
+  } else {
+    var toGrab = Object.keys( obj );
+  }
   
-  // TODO - known issue:
-  // if an error occurs while installing the package
-  // there won't be a rollback
-  // 
-  // TODO - dep removing is not nested
-  newDeps.forEach( o => {
+  var updated = [];
+  toGrab.forEach( hash => {
+    updated.push( obj[hash] );
     
-    config.pkg.removeDep( o.name );
-    
+    obj[ hash ] = { 
+      name: obj[hash],
+      header: config.ipfs.catJsonSync( hash )
+    }
   });
   
-  newDeps.forEach( o => {
-    
-    config.pkg.installDep({
-      working_dir: config.working_dir,
-      package_name: o.name
-    });
-    
-  });
+  fs.outputFileSync( npm_location + '/db.json', JSON.stringify(obj) );
   
-  config.pkg.saveJson();
+  if( config.cli ) {
+    if( updated.length > 0 ) {
+      console.log( 'Packages updated: ' + updated.join(', ') );
+    } else {
+      console.log('All packages up to date.');
+    }
+  }
   
 };
-
-module.exports = update;

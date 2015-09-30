@@ -21,7 +21,7 @@ var publish = function( config ){
   var compileContract = function( code ) {
     
     
-    var cmd = "echo \"" + code.replace(/`/g,"\\`") + "\"| solc --combined-json json-abi,natspec-dev";
+    var cmd = "echo \"" + code.replace(/`/g,"\\`").replace(/"/g,"\\\"") + "\"| solc --combined-json abi,devdoc";
     var out = JSON.parse( child_process.execSync(cmd, {encoding:'utf8'})).contracts;
      
     let keys = Object.keys(out);
@@ -29,8 +29,8 @@ var publish = function( config ){
     var contracts = {};
     _.each(out, ( contract, name ) => {
       contracts[name] = {
-          "abi": JSON.parse( contract['json-abi'] ),
-          "natspec": JSON.parse( contract["natspec-dev"] )
+          "abi": JSON.parse( contract['abi'] ),
+          "doc": JSON.parse( contract["devdoc"] )
         };
     })
     
@@ -207,6 +207,12 @@ var publish = function( config ){
   var json = _.clone( config.pkg.json );
   
   json.root = ipfsNode;
+  
+  var solcVersion = child_process.execSync("solc --version", {encoding: 'utf8'})
+    .split('/')[0]
+    .split(' ')[1];
+  
+  json.solc = solcVersion;
   
   // Compile Contracts
   var compiledContracts = compileContracts( config.working_dir, json.files );

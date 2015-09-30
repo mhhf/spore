@@ -9,6 +9,10 @@
       "type": "string",
       "title": "name"
     },
+    "solc": {
+      "type": "string",
+      "title": "Solidity version"
+    },
     "description": {
       "type": "string",
       "title": "Description",
@@ -25,8 +29,14 @@
       "type": "object"
     },
     "root": {
-      "type": "string"
+      "type": "string",
+      "description": "IPFS Hash of directory root"
+    },
+    "tags": {
+      "type": "array"
     }
   },
-  "additionalProperties": false
+  "additionalProperties": false,
+  "required": ["pv","name","solc","description","version","dependencies","contracts","root","tags"]
+
 }

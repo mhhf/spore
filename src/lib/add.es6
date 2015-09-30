@@ -54,7 +54,6 @@ var add = function( config ) {
          
     });
     
-    
   var sols = files.filter( f => /.*\.sol$/.test(f) );
   
 
@@ -82,6 +81,11 @@ var add = function( config ) {
     
   config.pkg.json.files = _.uniq( config.pkg.json.files.concat(files) );
   
+  if( config.cli && files.length > 0 ) {
+    console.log( "Added Files:\n" + files.join('\n') );
+  } else {
+    console.log( "Nothing new to add." );
+  }
   
   config.pkg.saveJson();
   

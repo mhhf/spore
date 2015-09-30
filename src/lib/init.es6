@@ -30,7 +30,8 @@ var init = function( config ) {
     },
     contracts: [],
     ignore: [],
-    files: []
+    files: [],
+    tags: []
   };
   
   fs.writeFileSync( config.working_dir + '/spore.json', JSON.stringify( json, false, 2 ));

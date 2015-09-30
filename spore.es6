@@ -15,17 +15,25 @@ Simple package management for Ethereum
 
 Usage:
   spore init
+  spore upgrade
   spore publish 
-  spore update
+  spore add       <path>
+  
   spore info      <package>
   spore install   <package>
   spore uninstall <package>
-  spore add       <path>
+  spore clone     <package>
   
   spore remote list
   spore remote select <name>
   spore remote add    <name>
   spore remote remove <name>
+  
+  spore update
+  spore search <string>
+  
+  spore instance add <package> <address>
+  spore instance list <package>
   
 Arguments:
   <package>                    Package name 
@@ -37,8 +45,9 @@ Options:
   -h, --help                   Shows this Help Screen
 `;
 
-// TODO - search 
-// spore search    <package>
+// spore clone <package>
+// spore info
+// spore status
 
 // --dep [<package>]            Package has to depend on <package>
 
@@ -50,6 +59,7 @@ var app = docopt.docopt(doc, {
 });
 
 var config = CONFIG( app, { cli: true } );
+
 
 // var config = require( home + '/.sporerc.json' );
 
@@ -64,8 +74,7 @@ if( app.init ) { //======================================================== INIT
   require('./src/lib/chain.es6')( config );
 
 } else {
-  config.initSpore();
-  config.initIPFS();
+  config.initAll();
   config.initPkg();
 }
 
@@ -89,7 +98,7 @@ if( app.info ) { //======================================================== INFO
   
   require( './src/lib/install.es6' )( _.extend( config, {package_name}) );
 
-} else if( !app.remote && app.add ) { //==================================== ADD
+} else if( !app.remote && !app.instance && app.add ) { //=================== ADD
   
   let path_to_file = app['<path>'];
   
@@ -101,14 +110,34 @@ if( app.info ) { //======================================================== INFO
   
   require('./src/lib/uninstall.es6')( _.extend( config, { package_name } ) );
 
-} else if( app.update ) { //============================================= UPDATE
+} else if( app.upgrade) { //============================================ UPGRADE
   
-  require('./src/lib/update.es6')( config );
+  require('./src/lib/upgrade.es6')( config );
 
 } else if( app.status ) { //============================================= STATUS
 
   // TODO - implement
   require('./src/lib/status.es6')( config );
+  
+} else if( app.update ) { //============================================= UPDATE
+  
+  require('./src/lib/update.es6')( config );
+
+} else if( app.search ) {
+  
+  require('./src/lib/search.es6')( config );
+
+} else if( app.clone ) {
+
+  require('./src/lib/clone.es6')( config );
+
+} else if( app.instance && app.add ) {
+  
+  require('./src/lib/instanceadd.es6')( config );
+  
+} else if( app.instance && app.list ) {
+  
+  require('./src/lib/instancelist.es6')( config );
   
 }
 

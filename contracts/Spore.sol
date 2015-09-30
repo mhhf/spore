@@ -56,4 +56,10 @@ contract Spore {
     return packages[name].owner;
   }
   
+  /// @dev This will return the current Spore version number.
+  /// @return Current version number.
+  function version( ) constant returns ( bytes32 ) {
+    return "0.0.2";
+  }
+  
 }
