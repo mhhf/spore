@@ -23,7 +23,6 @@ Usage:
   spore info     [<package>]
   spore install   <package>
   spore uninstall <package>
-  spore clone     <package>
   
   spore remote list
   spore remote select <name>
@@ -42,17 +41,14 @@ Arguments:
   <name>                       rpc settings name
   
 Options:
-  -v, --version                Shows the Version of spore
-  -h, --help                   Shows this Help Screen
+  -v, --version                Shows the version of spore
+  -h, --help                   Shows this help screen
+  --verbose                    Shows interlal logs
 `;
 
-// spore clone <package>
-// spore info
-// spore status
-// 
-// TODO - spore instance add: make --contract optional
 
-// --dep [<package>]            Package has to depend on <package>
+// spore clone <package>
+// spore status
 
 
 var app = docopt.docopt(doc, {
@@ -76,12 +72,7 @@ if( app.init ) { //======================================================== INIT
   
   require('./src/lib/chain.es6')( config );
 
-} else {
-  config.initAll();
-  config.initPkg();
-}
-
-if( app.info ) { //======================================================== INFO
+} else if( app.info ) { //================================================= INFO
   
   var json = require('./src/lib/info.es6')( config );
 
@@ -124,27 +115,26 @@ if( app.info ) { //======================================================== INFO
   
   require('./src/lib/update.es6')( config );
 
-} else if( app.search ) {
+} else if( app.search ) { //============================================= SEARCH
   
   require('./src/lib/search.es6')( config );
 
-} else if( app.clone ) {
+} else if( app.clone ) { // ============================================== CLONE
 
   require('./src/lib/clone.es6')( config );
 
-} else if( app.instance && app.add ) {
+} else if( app.instance && app.add ) { //========================== INSTANCE ADD
   
   require('./src/lib/instanceadd.es6')( config );
   
-} else if( app.instance && app.list ) {
+} else if( app.instance && app.list ) { //======================== INSTANCE LIST
   
   require('./src/lib/instancelist.es6')( config );
   
-} else if( app.link ) {
+} else if( app.link ) { //================================================= LINK
   
   require('./src/lib/link.es6')( config );
 
 }
 
-
-// process.exit();
+process.exit();

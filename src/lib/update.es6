@@ -4,7 +4,7 @@ var _  = require('underscore');
 
 module.exports = function( config ) {
   
-  var obj = config.spore.getPackagesArraySync();
+  var obj = config.contracts.spore().getPackagesArraySync();
   obj = _.invert( obj );
   
   var npm_location = process.env.SPORE_NPM_LOCATION;
@@ -31,7 +31,7 @@ module.exports = function( config ) {
     
     obj[ hash ] = { 
       name: obj[hash],
-      header: config.ipfs.catJsonSync( hash )
+      header: config.ipfs().catJsonSync( hash )
     }
   });
   

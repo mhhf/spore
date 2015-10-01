@@ -21,7 +21,7 @@ describe('config', function() {
     
     var config = Config()
     
-    config.initSpore();
+    var spore = config.contracts.spore();
     
     done();
   });
@@ -31,7 +31,7 @@ describe('config', function() {
     
     var config = Config()
     
-    config.initIpfs();
+    var ipfs = config.ipfs();
     
     done();
   });

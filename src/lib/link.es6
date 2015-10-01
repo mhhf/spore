@@ -29,7 +29,7 @@ module.exports = function( config ) {
   }
   
   
-  config.pkg.json.files
+  config.pkg().json.files
   .filter( f => (/\.sol$/).test( f ) ) // Filter solidity files
   .forEach( file => {
     // get relative path
@@ -57,7 +57,7 @@ module.exports = function( config ) {
         config.log(`normalized: ${normalized}`)
         
         var found = [];
-        _.map( config.pkg.json.dependencies, ( hash, name ) => `${name}-${hash.slice(2,10)}` )
+        _.map( config.pkg().json.dependencies, ( hash, name ) => `${name}-${hash.slice(2,10)}` )
           .forEach( dep => {
             config.log(`checking in spore_packages/${dep}`);
             var files = getFileSet( `spore_packages/${dep}` );
@@ -69,6 +69,7 @@ module.exports = function( config ) {
         config.log('found', found);
         
         if( found.length == 1 ) {
+          console.log(`Changed import in ${file} to ${revrel}/${found[0]}`);
           return `import "${revrel}/${found[0]}";`;
         } else if( found.length == 0) {
           console.log(`No files found for ${import_name}, try to link them manualy.`);

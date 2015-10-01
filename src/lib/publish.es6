@@ -10,29 +10,28 @@ var deasync             = require('deasync');
 
 
 
-
-
-
-
-
 var publish = function( config ){
   
 
   var compileContract = function( code ) {
     
     
-    var cmd = "echo \"" + code.replace(/`/g,"\\`").replace(/"/g,"\\\"") + "\"| solc --combined-json abi,devdoc";
+    var cmd = "echo \"" + code.replace(/`/g,"\\`").replace(/"/g,"\\\"") + "\"| solc --combined-json abi,devdoc,bin --optimize";
     var out = JSON.parse( child_process.execSync(cmd, {encoding:'utf8'})).contracts;
      
     let keys = Object.keys(out);
       
     var contracts = {};
     _.each(out, ( contract, name ) => {
-      contracts[name] = {
+      let c = {
           "abi": JSON.parse( contract['abi'] ),
-          "doc": JSON.parse( contract["devdoc"] )
+          "doc": JSON.parse( contract["devdoc"] ),
+          "bin": contract['bin']
         };
-    })
+      
+      contracts[name] = addJsonToIPFS(c);
+    });
+
     
     return contracts;
   };
@@ -166,7 +165,7 @@ var publish = function( config ){
       fs.copySync( working_dir + '/' + file, working_dir + '/.spore/build/' + file );
     });
     
-    var rootHash = config.ipfs.addSync( working_dir + "/.spore/build/", {"r": true} );
+    var rootHash = config.ipfs().addSync( working_dir + "/.spore/build/", {"r": true} );
     
       fs.removeSync( working_dir + '/.spore' );
      
@@ -179,7 +178,7 @@ var publish = function( config ){
 
     var addJsonToIPFS = function( json ) {
       
-      var jsonHash = config.ipfs.addJsonSync( json );
+      var jsonHash = config.ipfs().addJsonSync( json );
       
       return jsonHash;
       
@@ -188,7 +187,7 @@ var publish = function( config ){
 
 
   var assertOwnership = function( name ) {
-    var addr = config.spore.getOwnerSync( name );
+    var addr = config.contracts.spore().getOwnerSync( name );
     if( addr != '0x0000000000000000000000000000000000000000' 
        && addr != web3.eth.defaultAccount ) 
      throw new Error(`Package with name ${json.name} is already owned by ${addr}`);
@@ -196,15 +195,15 @@ var publish = function( config ){
   
   // Check if spore.json has the right format
   // let json = JSON.parse(fs.readFileSync( working_dir + '/spore.json', 'utf8' ));
-  validateJson( config.working_dir, config.pkg.json );
+  validateJson( config.working_dir, config.pkg().json );
   
   
   // Check if name isn't taken, yet or the owner owns the package name
-  assertOwnership( config.pkg.json.name );
+  assertOwnership( config.pkg().json.name );
 
-  var ipfsNode = publishFiles( config.working_dir, config.pkg.json );
+  var ipfsNode = publishFiles( config.working_dir, config.pkg().json );
   
-  var json = _.clone( config.pkg.json );
+  var json = _.clone( config.pkg().json );
   
   json.root = ipfsNode;
   
@@ -224,6 +223,7 @@ var publish = function( config ){
   delete json.files;
   delete json.ignore;
   
+
   var jsonHash = addJsonToIPFS( json );
     
   // TODO - Check if cliet has funds to publish the package
@@ -236,7 +236,7 @@ var publish = function( config ){
   if( config.cli )
     console.log('brace yourself, gas will be spend!');
   
-  var tx = config.spore.registerPackageSync( json.name, jsonHash, { gas: 300000 } );
+  var tx = config.contracts.spore().registerPackageSync( json.name, jsonHash, { gas: 300000 } );
 
   // var receipt = web3.eth.getTransactionReceipt( tx );
   // console.log( receipt );

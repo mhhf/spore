@@ -17,9 +17,6 @@ var working_dir_b  = __dirname+'/.scenarios/b';
 
 var configA = CONFIG({working_dir: working_dir_a_}, {cli: false});
 var configB = CONFIG({working_dir: working_dir_b}, {cli: false});
-configA.initAll();
-configB.initAll();
-
 
 chai.should();
 
@@ -33,7 +30,6 @@ describe('spore#upgrade', function() {
     
     // init a
     init( configA );
-    configA.initPkg();
     
     
     var path_to_file = configA.path_to_file = 'readme.md';
@@ -54,7 +50,6 @@ describe('spore#upgrade', function() {
     // 
     // init b
     init( configB );
-    configB.initPkg();
     
     
     configB.package_name = 'a_';
@@ -62,7 +57,7 @@ describe('spore#upgrade', function() {
     require('../src/lib/install.es6')( configB );
     
     
-    var oldDep = configB.pkg.json.dependencies['a_'];
+    var oldDep = configB.pkg().json.dependencies['a_'];
     
     // randomized new a
     var path_to_file = configA.path_to_file = 'readme.md';
@@ -81,7 +76,7 @@ describe('spore#upgrade', function() {
     require('../src/lib/upgrade.es6')( configB );
     
     
-    var newDep = configB.pkg.json.dependencies['a_'];
+    var newDep = configB.pkg().json.dependencies['a_'];
     
   });
 

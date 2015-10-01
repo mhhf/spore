@@ -34,8 +34,6 @@ describe('spore#add', function() {
       working_dir
     });
     
-    config.initPkg();
-    
   });
   
   after( function() {
@@ -52,7 +50,7 @@ describe('spore#add', function() {
     
     add( config );
     
-    config.pkg.json.files[0].should.eql( path_to_file );
+    config.pkg().json.files[0].should.eql( path_to_file );
     
     done();
   });
@@ -67,7 +65,7 @@ describe('spore#add', function() {
     
     add( config );
     
-    config.pkg.json.contracts[0].should.eql( 'a' );
+    config.pkg().json.contracts[0].should.eql( 'a' );
     
     done();
   });

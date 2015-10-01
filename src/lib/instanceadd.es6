@@ -21,7 +21,7 @@ module.exports = function( config ) {
   // TODO - only add, if not already added
   var pkg = config['<package>'];
   if( pkg.length < 46 ) { // Not IPFS - hash 
-    pkg = config.spore.getLinkSync();
+    pkg = config.contracts.spore().getLinkSync();
   }
   
   // TODO - resolve contract name

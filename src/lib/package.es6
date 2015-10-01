@@ -12,6 +12,11 @@ function Package( config ) {
 
   // check if package is installed
   // Check if spore.json has the right format
+  if( !fs.existsSync(config.working_dir + '/spore.json') ) {
+    console.log('ERROR'.red + ": No spore environment found.");
+    process.exit();
+  }
+  
   let json = JSON.parse(fs.readFileSync( config.working_dir + '/spore.json', 'utf8' ));
   if( !tv4.validate( require('../user_spec.json'), json ) ) throw tv4.error;
   
@@ -40,9 +45,9 @@ function Package( config ) {
     
     var ipfsAddress = getDependencyLink( name );
 
-    var pkgJson = config.ipfs.catJsonSync( ipfsAddress );
+    var pkgJson = config.ipfs().catJsonSync( ipfsAddress );
 
-    var files = _.keys(config.ipfs.mapAddressToFileSync( pkgJson.root ));
+    var files = _.keys(config.ipfs().mapAddressToFileSync( pkgJson.root ));
 
     files.forEach( path => {
 
@@ -83,7 +88,7 @@ function Package( config ) {
     }).map( name => {
       config.log(4,'d '+name);
       return (cb) => {
-        var deps_ = config.ipfs.catJsonSync( deps[name] ).dependencies;
+        var deps_ = config.ipfs().catJsonSync( deps[name] ).dependencies;
         config.log('rec dep: '+JSON.stringify(deps_));
         serializeDepTree( deps_, (err, res) => {
           cb(err, res);
@@ -132,14 +137,14 @@ function Package( config ) {
     config.log('to install: '+toInstall);
     
     toInstall.forEach( addr => {
-      var json = config.ipfs.catJsonSync( addr );
-      var files = config.ipfs.mapAddressToFileSync( json.root );
+      var json = config.ipfs().catJsonSync( addr );
+      var files = config.ipfs().mapAddressToFileSync( json.root );
       var pkgDir = config.working_dir +'/'+ dir +'/'+ json.name+'-'+addr.slice(2,10);
       // addToIgnore( _.keys(files) );
       
       // Checkout package files
       config.log('checking out files: ',files);
-      config.ipfs.checkoutFilesSync( pkgDir, files );
+      config.ipfs().checkoutFilesSync( pkgDir, files );
       
       // Link nested dependencies to flat structure
       config.log( `in pkg ${json.name} and linking nested dependencies: `, json.dependencies );
@@ -150,7 +155,6 @@ function Package( config ) {
         let src = `${config.working_dir}/${dir}/${name}-${hash.slice(2,10)}`;
         let dest = `${pkgDir}/spore_packages`;
         let relative = path.relative( dest, src );
-        console.log(relative);
         fs.symlinkSync( relative, `${dest}/${name}-${hash.slice(2,10)}` );
       });
     });
@@ -161,7 +165,7 @@ function Package( config ) {
   var installDep = function( wd, package_name ) {
     
     // TODO - skip if package_name is already a hash
-    var ipfsAddress = config.spore.getLinkSync( package_name );
+    var ipfsAddress = config.contracts.spore().getLinkSync( package_name );
     
     // Test if user made a typo
     if( ipfsAddress === "" ) { 

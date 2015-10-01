@@ -14,7 +14,6 @@ var working_dir = __dirname+'/.scenarios/b';
 
 
 var config = CONFIG({ working_dir }, {cli: false});
-config.initAll();
 
 describe('spore#uninstall', function() {
   
@@ -23,7 +22,6 @@ describe('spore#uninstall', function() {
     scenarios.setup( 'b' )
     
     init( config );
-    config.initPkg();
     config.package_name = 'a';
     
     require('../src/lib/install.es6')( config );
@@ -38,8 +36,8 @@ describe('spore#uninstall', function() {
     
     require('../src/lib/uninstall.es6')( config );
     
-    config.pkg.json.ignore.length.should.eql(0);
-    config.pkg.json.dependencies.should.not.have.a.property('a');
+    config.pkg().json.ignore.length.should.eql(0);
+    config.pkg().json.dependencies.should.not.have.a.property('a');
     
     done();
   });

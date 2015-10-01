@@ -12,7 +12,6 @@ var scenarios   = require('./helpers/scenarios.js');
 var CONFIG      = require('../src/lib/config.es6');
 
 var config = CONFIG({}, {cli: false});
-config.initAll();
 
 chai.should();
 
@@ -28,8 +27,6 @@ describe('spore#install', function() {
     scenarios.setup( 'a' );
     init( config );
     
-    config.initPkg();
-    
     
     var path_to_file = 'contracts/a.sol';
     config.path_to_file = path_to_file;
@@ -43,8 +40,6 @@ describe('spore#install', function() {
     scenarios.setup( 'b', 'a' )
     init( config );
     
-    config.initPkg();
-
   });
   
 
@@ -58,8 +53,7 @@ describe('spore#install', function() {
     require('../src/lib/install.es6')( config );
     
     // Should have a as a dependency
-    config.pkg.json.dependencies.should.have.a.property('a');
-    config.pkg.json.ignore.indexOf('contracts/a.sol').should.be.above(-1);
+    config.pkg().json.dependencies.should.have.a.property('a');
     
     done();
   });
@@ -69,7 +63,7 @@ describe('spore#install', function() {
     config.package_name = 'does not exist';
     require('../src/lib/install.es6')( config );
     
-    config.pkg.json.dependencies.should.not.have.a.property('does not exist');
+    config.pkg().json.dependencies.should.not.have.a.property('does not exist');
     
     done();
   });

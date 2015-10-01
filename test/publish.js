@@ -17,7 +17,6 @@ var working_dir = __dirname+'/.scenarios/a';
 
 var config = CONFIG({working_dir}, {cli: false});
 var hash, json;
-config.initAll();
 
 describe('spore#publish', function() {
   
@@ -29,8 +28,6 @@ describe('spore#publish', function() {
     init(config);
     
     config.path_to_file = 'contracts/a.sol';
-    config.initPkg();
-    config.initIpfs();
     
     add( config );
     
@@ -68,7 +65,7 @@ describe('spore#publish', function() {
   
   it("should publish a json", function(done){
     
-    json = config.ipfs.catJsonSync( hash );
+    json = config.ipfs().catJsonSync( hash );
     
     json.should.be.an('object');
     

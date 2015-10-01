@@ -12,7 +12,7 @@ var working_dir = process.env.SPORE_WORKING_DIR;
 var npm_location = process.env.SPORE_NPM_LOCATION;
 var home = process.env.HOME || process.env.USERPROFILE;
 
-var config_location = home + '/.spore_.json';
+var config_location = npm_location + '/.spore.json';
 
 var env; // = require( home + '/.spore.json' );
 
@@ -40,22 +40,22 @@ module.exports = function ( config, options ){
   var cfg = _.extend( config || {}, env, options ); 
   if( !cfg.working_dir && working_dir ) cfg.working_dir = working_dir;
   
-  cfg.logger = require('./log.es6')();
+  cfg.logger = require('./log.es6')( cfg );
   cfg.log = cfg.logger.log;
   
-  cfg.initSpore = function() {
-    var remote = cfg.selected;
-    cfg.spore = SPORE( cfg, cfg.chains[remote].address );
-  }
-  
-  cfg.initIpfs = function() {
-    cfg.ipfs = IPFS( cfg.ipfs_host, cfg.ipfs_port );
-    try {
-      var res = cfg.ipfs.addJsonSync({});
-    } catch ( e ) {
-      console.log('Error: '.red + 'No IPFS connection could be established. Is the daemon running on localhost?');
-      process.exit();
-    }  
+  var ipfs;
+  cfg.ipfs = function() {
+    if( !ipfs ) {
+      ipfs = IPFS( cfg.ipfs_host, cfg.ipfs_port );
+      try {
+        var res = ipfs.addJsonSync({});
+      } catch ( e ) {
+        console.log(e);
+        console.log('Error: '.red + 'No IPFS connection could be established. Is the daemon running on localhost?');
+        process.exit();
+      }  
+    }
+    return ipfs;
   }
   
   var web3Init = false;
@@ -71,13 +71,14 @@ module.exports = function ( config, options ){
     return web3;
   }
   
-  cfg.initPkg = function() {
-    cfg.pkg = PKG( cfg );
-  }
+  // cfg.initPkg = function() {
+  //   cfg.pkg = PKG( cfg );
+  // }
   
-  cfg.initAll = function() {
-    cfg.initSpore();
-    cfg.initIpfs();
+  var pkg;
+  cfg.pkg = function() {
+    if( !pkg ) pkg = PKG( cfg );
+    return pkg;
   }
   
   cfg.addChain = function( name ) {
@@ -100,8 +101,11 @@ module.exports = function ( config, options ){
     instance: function() {
       if( !instances.instance ) instances.instance = Instance( cfg );
       return instances.instance;
+    },
+    spore: function() {
+      if( !instances.spore ) instances.spore = SPORE( cfg );
+      return instances.spore;
     }
-  
   }
   
   cfg.removeChain = function( name ) {

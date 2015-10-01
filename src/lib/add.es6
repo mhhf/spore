@@ -54,8 +54,8 @@ var filterFiles = function( files, config ) {
         f != "" 
         && f != '/spore.json' // ignore spore.json
         && !(/spore_packages/).test(f) // ignore spore_packages dirs
-        && config.pkg.json.files.indexOf( f ) == -1 // File already included
-        && config.pkg.json.ignore.indexOf( f ) == -1 // ignore files in json.ignore
+        && config.pkg().json.files.indexOf( f ) == -1 // File already included
+        && config.pkg().json.ignore.indexOf( f ) == -1 // ignore files in json.ignore
         
       return valide
      
@@ -95,12 +95,11 @@ var handleContracts = function( files, config ) {
   }
   
   // Include contracts to json
-  config.pkg.json.contracts = _.uniq( config.pkg.json.contracts.concat( toInclude ) )
+  config.pkg().json.contracts = _.uniq( config.pkg().json.contracts.concat( toInclude ) )
   
 }
 
 
-// TODO pkg -> config.pkg
 var add = function( config ) {
   
   var dist = config.working_dir + '/' + config.path_to_file;
@@ -113,10 +112,10 @@ var add = function( config ) {
   handleContracts( files, config );  
     
   // Add files
-  config.pkg.json.files = _.uniq( config.pkg.json.files.concat(files) );
+  config.pkg().json.files = _.uniq( config.pkg().json.files.concat(files) );
   
   // Save json
-  config.pkg.saveJson();
+  config.pkg().saveJson();
     
   // Feedback
   if( config.cli ) {

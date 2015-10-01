@@ -10,9 +10,11 @@ var _               = require('underscore');
 
 var install = function( config ){
   
-  config.pkg.installDep( 'spore_packages', config.package_name );
+  config.pkg().installDep( 'spore_packages', config.package_name );
   
-  config.pkg.saveJson();
+  config.pkg().saveJson();
+  
+  if( config.cli ) console.log( `Package ${config.package_name} installed.` );
 
 };
 

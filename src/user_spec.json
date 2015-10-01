@@ -30,6 +30,5 @@
       "type": "array"
     }
   },
-  "additionalProperties": false,
-  "required": ["name","description", "version", "dependencies","contracts", "files", "ignore", "tags"]
+  "required": [ "name", "description", "version", "dependencies","contracts", "files", "ignore", "tags"]
 }
