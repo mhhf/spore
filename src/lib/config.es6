@@ -40,6 +40,9 @@ module.exports = function ( config, options ){
   var cfg = _.extend( config || {}, env, options ); 
   if( !cfg.working_dir && working_dir ) cfg.working_dir = working_dir;
   
+  cfg.logger = require('./log.es6')();
+  cfg.log = cfg.logger.log;
+  
   cfg.initSpore = function() {
     var remote = cfg.selected;
     cfg.spore = SPORE( cfg, cfg.chains[remote].address );
@@ -92,10 +95,13 @@ module.exports = function ( config, options ){
     }
   }
   
-  var instance;
-  cfg.instance = function() {
-    if( !instance ) instance = Instance( cfg );
-    return instance;
+  var instances = {};
+  cfg.contracts = {
+    instance: function() {
+      if( !instances.instance ) instances.instance = Instance( cfg );
+      return instances.instance;
+    }
+  
   }
   
   cfg.removeChain = function( name ) {

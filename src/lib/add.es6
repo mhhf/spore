@@ -8,87 +8,124 @@ var colors       = require('colors');
 var _            = require('underscore');
 var readlineSync = require('readline-sync');
 
-// PATH -> [PATH]
+// DIR_PATH -> [FILES]
 // returns a set of relative pathes
-var getFileSet = function( config ){
+var getFileSet = function( dist ){
 
   var fileset = [];
-  file.walkSync( config.path_to_file, ( dirPath, dirs, files ) => {
+  file.walkSync( dist, ( dirPath, dirs, files ) => {
     
-    let relative_path = path.relative( config.working_dir, dirPath);
-    if ( relative_path != "" ) relative_path += '/';
+    // let relative_path = path.relative( config.working_dir, dirPath);
+    // if ( relative_path != "" ) relative_path += '/';
     
-    let fset = files.map( f =>  relative_path + f );
+    let fset = files.map( f =>  dirPath + '/' + f );
     
-    fileset = fileset.concat(fset);
+    fileset = fileset.concat( fset );
     
   });
   
   return fileset;
 }
 
-
-// TODO pkg -> config.pkg
-var add = function( config ) {
-  
+// PATH -> [FILES]
+var getFiles = function( dist ) {
+   
   // Edge Cases
-  if( !fs.existsSync( config.working_dir + '/' + config.path_to_file ) )
-    throw new Error(`Can't find ${config.path_to_file}` );
-    
-  if( fs.lstatSync( config.working_dir + '/' + config.path_to_file ).isDirectory() ) {
-    var files = getFileSet( config );
-  } else {
-    var files = [config.path_to_file];
-  }
+  if( !fs.existsSync( dist ) )
+    return [];
   
-  files = files
+  if( fs.lstatSync( dist ).isDirectory() ) {
+    return getFileSet( dist );
+  } else {
+    return [ dist ];
+  }
+}
+
+// [FILES] -> [FILES]
+// Filter relevant files
+var filterFiles = function( files, config ) {
+  return files
+    .map( f => {
+      return path.relative( config.working_dir, f );
+    })
     .filter( (f) => { 
       
       let valide = 
         f != "" 
         && f != '/spore.json' // ignore spore.json
+        && !(/spore_packages/).test(f) // ignore spore_packages dirs
         && config.pkg.json.files.indexOf( f ) == -1 // File already included
         && config.pkg.json.ignore.indexOf( f ) == -1 // ignore files in json.ignore
-      
+        
       return valide
-         
+     
     });
-    
-  var sols = files.filter( f => /.*\.sol$/.test(f) );
+}
+
+// Handle Contract files
+//
+// 1. Filter .sol files
+// 2. Grab all contracts
+// 3. If not cli or user wats them to get added => add them seperatly
+// 
+var handleContracts = function( files, config ) {
   
+  var sols = files.filter( f => /.*\.sol$/.test(f) );
 
   var contracts = _.flatten(
     sols.map( f => {
     let content = fs.readFileSync( config.working_dir + '/' + f, 'utf8' );
+    config.log('content: '+content);
     return content
-      .match( /contract\s+(\w)+\s+{/g )
+      .match( /contract\s+(\w)+[^{]*{/g )
       .map( r => r.split(/\s+/)[1].split('{')[0] );
-  }))
-   
-  var includeContracts = contracts.length > 0;
+  }));
   
-  // scan for contracts and ask if they should be added
-  // Ask if to include contracts for publishing
+  // Ask the user which contract he want to be included
+  // 
+  var toInclude = contracts;
   if( config.cli && contracts.length > 0 ) {
-    var readlineSync = require('readline-sync');
-    let answer = readlineSync.question(`Include contracts: ${contracts} [y/n]: `);
-    includeContracts = (/^\s*y/g).test( answer );
+    console.log(`Following contracts found: ${contracts}`);
+    
+    toInclude = contracts.filter( contract => {
+      return (/^\s*y/g)
+        .test( readlineSync 
+        .question(`Include contract: ${contract} (y/n): `) );
+    });
   }
   
-  if( includeContracts ) {
-    config.pkg.json.contracts = _.uniq( config.pkg.json.contracts.concat( contracts ) )
-  }
+  // Include contracts to json
+  config.pkg.json.contracts = _.uniq( config.pkg.json.contracts.concat( toInclude ) )
+  
+}
+
+
+// TODO pkg -> config.pkg
+var add = function( config ) {
+  
+  var dist = config.working_dir + '/' + config.path_to_file;
+  var files = getFiles( dist );
+  
+  // Filter relevant files
+  files = filterFiles( files, config );
     
+  // Handle contract Files
+  handleContracts( files, config );  
+    
+  // Add files
   config.pkg.json.files = _.uniq( config.pkg.json.files.concat(files) );
   
-  if( config.cli && files.length > 0 ) {
-    console.log( "Added Files:\n" + files.join('\n') );
-  } else {
-    console.log( "Nothing new to add." );
-  }
-  
+  // Save json
   config.pkg.saveJson();
-  
+    
+  // Feedback
+  if( config.cli ) {
+    if( files.length > 0  ) {
+      console.log( "Added Files:\n" + files.join('\n') );
+    } else {
+      console.log( "Nothing new to add." );
+    }
+  }
   
 }
 

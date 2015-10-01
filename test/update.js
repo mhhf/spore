@@ -17,13 +17,13 @@ var working_dir_b  = __dirname+'/.scenarios/b';
 
 var configA = CONFIG({working_dir: working_dir_a_}, {cli: false});
 var configB = CONFIG({working_dir: working_dir_b}, {cli: false});
-configA.init();
-configB.init();
+configA.initAll();
+configB.initAll();
 
 
 chai.should();
 
-describe('spore#update', function() {
+describe('spore#upgrade', function() {
   
   before( function() {
     scenarios.setupAll();
@@ -78,7 +78,7 @@ describe('spore#update', function() {
     
     
     // UPDATE B
-    require('../src/lib/update.es6')( configB );
+    require('../src/lib/upgrade.es6')( configB );
     
     
     var newDep = configB.pkg.json.dependencies['a_'];
@@ -89,9 +89,9 @@ describe('spore#update', function() {
     scenarios.cleanup();
   });
   
-  it("should update a simple package", function(done){
+  it("should upgrade a simple package", function(done){
     
-    require('../src/lib/update.es6')( configB );
+    require('../src/lib/upgrade.es6')( configB );
     
     done();
   });

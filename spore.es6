@@ -18,8 +18,9 @@ Usage:
   spore upgrade
   spore publish 
   spore add       <path>
+  spore link
   
-  spore info      <package>
+  spore info     [<package>]
   spore install   <package>
   spore uninstall <package>
   spore clone     <package>
@@ -32,11 +33,11 @@ Usage:
   spore update
   spore search <string>
   
-  spore instance add <package> <address>
+  spore instance add <package> <address> --contract <contract>
   spore instance list <package>
   
 Arguments:
-  <package>                    Package name 
+  <package>                    Package name or hash
   <path>                       path to file/ directory
   <name>                       rpc settings name
   
@@ -48,6 +49,8 @@ Options:
 // spore clone <package>
 // spore info
 // spore status
+// 
+// TODO - spore instance add: make --contract optional
 
 // --dep [<package>]            Package has to depend on <package>
 
@@ -80,9 +83,7 @@ if( app.init ) { //======================================================== INIT
 
 if( app.info ) { //======================================================== INFO
   
-  let package_name = app['<package>'];
-  
-  var json = require('./src/lib/info.es6')( _.extend(config, { package_name }) );
+  var json = require('./src/lib/info.es6')( config );
 
   console.log( JSON.stringify(json, false, 2) );
   
@@ -139,7 +140,11 @@ if( app.info ) { //======================================================== INFO
   
   require('./src/lib/instancelist.es6')( config );
   
+} else if( app.link ) {
+  
+  require('./src/lib/link.es6')( config );
+
 }
 
 
-process.exit();
+// process.exit();

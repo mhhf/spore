@@ -14,7 +14,11 @@ var Instance = function( config ) {
     var l = length(link);
     
     for ( var i=0; i<l; i++ ) {
-      arr.push( getAt( link, i ) );
+      var ret = getAt( link, i );
+      arr.push( {
+        name: config.web3().toAscii(ret[0]).replace(/\u0000/g,''),
+        addr: ret[1]
+      } );
     }
     
     return arr;

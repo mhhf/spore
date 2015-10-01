@@ -16,6 +16,7 @@ chai.should();
 var working_dir = __dirname+'/.scenarios/a';
 
 var config = CONFIG({working_dir}, {cli: false});
+var hash, json;
 config.initAll();
 
 describe('spore#publish', function() {
@@ -29,6 +30,7 @@ describe('spore#publish', function() {
     
     config.path_to_file = 'contracts/a.sol';
     config.initPkg();
+    config.initIpfs();
     
     add( config );
     
@@ -38,11 +40,13 @@ describe('spore#publish', function() {
     scenarios.cleanup();
   });
   
-  it("should have the correct hash", function(done){
+  it("should return an ipfs-hash", function(done){
     
-    var hash = require('../src/lib/publish.es6')( config );
+    hash = require('../src/lib/publish.es6')( config );
     
-    hash.should.eql('QmU1CxrGNyHA4idkExQgAi7JZmJ1f3zVfWpa76m7LPnBbK');
+    hash.should.be.a('string');
+    hash.length.should.eql(46);
+    hash.slice(0,2).should.eql('Qm');
     
     done();
   });
@@ -58,6 +62,32 @@ describe('spore#publish', function() {
     var hash = require('../src/lib/publish.es6')( config );
     
     hash.should.not.eql('QmU1CxrGNyHA4idkExQgAi7JZmJ1f3zVfWpa76m7LPnBbK');
+    
+    done();
+  });
+  
+  it("should publish a json", function(done){
+    
+    json = config.ipfs.catJsonSync( hash );
+    
+    json.should.be.an('object');
+    
+    done();
+  });
+  
+  it("should have the correct json published", function(done){
+    
+    json.should.have.property('name').and.eql('a');
+    json.should.have.property('version').and.eql('0.1.0');
+    json.should.have.property('contracts')
+      .and.should.have.property('a');
+    
+    done();
+  });
+  
+  it("should have a solc version", function(done){
+    
+    json.should.have.property('solc');
     
     done();
   });

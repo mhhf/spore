@@ -67,7 +67,7 @@ function IPFS ( host, port ) {
       
       // Don't overwrite existing files
       if( fs.existsSync( path ) ) {
-        console.log(`File ${path} already exists.`.red);
+        // console.log(`File ${path} already exists.`.red);
       }
       fs.outputFileSync( working_dir + '/' + path, data );
       
@@ -76,6 +76,7 @@ function IPFS ( host, port ) {
     cb();
     
   }
+  var checkoutFilesSync = deasync( checkoutFiles );
   
 
 
@@ -90,6 +91,7 @@ function IPFS ( host, port ) {
     catSync,
     catJsonSync,
     mapAddressToFileSync,
+    checkoutFilesSync,
     checkoutFiles
   }; 
   

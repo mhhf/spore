@@ -5,7 +5,7 @@ module.exports = function( config ) {
     pkg = config.spore.getLinkSync();
   }
   
-  var arr =  config.instance().list( pkg );
+  var arr =  config.contracts.instance().list( pkg );
  
   console.log(arr);
   

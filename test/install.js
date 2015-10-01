@@ -54,13 +54,22 @@ describe('spore#install', function() {
   
   it("should install a simple package", function(done){
     
-    
     config.package_name = 'a';
     require('../src/lib/install.es6')( config );
     
     // Should have a as a dependency
     config.pkg.json.dependencies.should.have.a.property('a');
     config.pkg.json.ignore.indexOf('contracts/a.sol').should.be.above(-1);
+    
+    done();
+  });
+  
+  it("should not install a non existend package", function(done){
+    
+    config.package_name = 'does not exist';
+    require('../src/lib/install.es6')( config );
+    
+    config.pkg.json.dependencies.should.not.have.a.property('does not exist');
     
     done();
   });

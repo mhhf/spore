@@ -24,7 +24,8 @@ describe('datamodel', function() {
       ],
       "ignore": [
         "/Users/mhhf/work/01_internal/spore/example/mortal/contracts/owned.sol"
-      ]
+      ],
+      "tags": ['a','b']
     };
     
     var validation = tv4.validate( example, schema );

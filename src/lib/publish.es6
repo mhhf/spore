@@ -209,8 +209,7 @@ var publish = function( config ){
   json.root = ipfsNode;
   
   var solcVersion = child_process.execSync("solc --version", {encoding: 'utf8'})
-    .split('/')[0]
-    .split(' ')[1];
+  .match('Version: ([^/]+)/')[1];
   
   json.solc = solcVersion;
   

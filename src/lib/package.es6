@@ -6,6 +6,7 @@ var colors      = require('colors');
 var _           = require('underscore');
 var deasync     = require('deasync');
 var async       = require('async');
+var path        = require('path');
 
 function Package( config ) {
 
@@ -67,18 +68,23 @@ function Package( config ) {
   // Serialize the package Tree and check for problems
   // { NAME => ADDRESS }
   var serializeDepTree = function( deps, cb ) {
+    config.log(4,'current pkgDeps: '+pkgDeps)
+    config.log(4,'serializing deps: '+ JSON.stringify(deps));
     
     var fnMap = _.keys(deps).filter( name => {
       if( typeof pkgDeps[name] === "undefined" ) {
         pkgDeps[name] = deps[name];
+        config.log('don\'t filter '+name);
         return true;
       }
       if ( pkgDeps[name] != deps[name] ) 
         throw new Error(`Two packages are depending on different versions of ${name}`);
       return false;
     }).map( name => {
+      config.log(4,'d '+name);
       return (cb) => {
         var deps_ = config.ipfs.catJsonSync( deps[name] ).dependencies;
+        config.log('rec dep: '+JSON.stringify(deps_));
         serializeDepTree( deps_, (err, res) => {
           cb(err, res);
         } );
@@ -93,40 +99,91 @@ function Package( config ) {
   var serializeDepTreeSync = deasync( serializeDepTree );
   
   
-
-
-
-
-  var installDep = function( opt ) {
+  // Install flat:
+  // A `spore_packages` directory in the root procejt directory is created.
+  // It Contains all nested dependency packages
+  // e.g.:
+  //
+  // spore_packages
+  // ├── mortal-Qn4p5PNT
+  // │   └── contracts
+  // │       └── mortal.sol
+  // └── owned-TEoYCRgy
+  //     └── contracts
+  //         └── owned.sol
+  //         
+  var installPkg = function( hash, dir, package_name ) {
     
-    var ipfsAddress = config.spore.getLinkSync( opt.package_name );
-    
-    if( ipfsAddress === "" ) { 
-      console.log(`no package ${opt.package_name} found.`.red);
-      process.exit();
-    }
-    
+    // Save current dependencies
     let oldAddresses = _.values( json.dependencies );
     
-    json.dependencies[ opt.package_name ] = ipfsAddress;
+    // assign new dependency to list.
+    json.dependencies[ package_name ] = hash;
     
-    pkgDeps = _.clone( json.dependencies );
+    pkgDeps = _.values( json.dependencies );
+    config.log('first level deps:', json.dependencies );
+    
     var deps = serializeDepTreeSync( json.dependencies );
+    config.log("deps: "+JSON.stringify(deps))
+    
     let newAddresses = _.values( deps );
-
+    
     let toInstall = _.difference(newAddresses, oldAddresses);
-
-    var depFs = toInstall.map( addr => {
-      return ( cb ) => { 
-        var json = config.ipfs.catJsonSync( addr );
-        var files = config.ipfs.mapAddressToFileSync( json.root );
-        addToIgnore( _.keys(files) );
-        config.ipfs.checkoutFiles( opt.working_dir, files, cb );
-      }
+    config.log('to install: '+toInstall);
+    
+    toInstall.forEach( addr => {
+      var json = config.ipfs.catJsonSync( addr );
+      var files = config.ipfs.mapAddressToFileSync( json.root );
+      var pkgDir = config.working_dir +'/'+ dir +'/'+ json.name+'-'+addr.slice(2,10);
+      // addToIgnore( _.keys(files) );
+      
+      // Checkout package files
+      config.log('checking out files: ',files);
+      config.ipfs.checkoutFilesSync( pkgDir, files );
+      
+      // Link nested dependencies to flat structure
+      config.log( `in pkg ${json.name} and linking nested dependencies: `, json.dependencies );
+      if( Object.keys( json.dependencies ).length > 0 )
+        fs.ensureDirSync( pkgDir+'/spore_packages');
+      
+      _.each(json.dependencies, function( hash, name ) {
+        let src = `${config.working_dir}/${dir}/${name}-${hash.slice(2,10)}`;
+        let dest = `${pkgDir}/spore_packages`;
+        let relative = path.relative( dest, src );
+        console.log(relative);
+        fs.symlinkSync( relative, `${dest}/${name}-${hash.slice(2,10)}` );
+      });
     });
+    
+  }
 
-    var parallelSync = deasync( async.parallel );
-    var res = parallelSync(depFs);
+  // Instal package package_name into wd
+  var installDep = function( wd, package_name ) {
+    
+    // TODO - skip if package_name is already a hash
+    var ipfsAddress = config.spore.getLinkSync( package_name );
+    
+    // Test if user made a typo
+    if( ipfsAddress === "" ) { 
+      if( config.cli )
+        console.log(`no package ${package_name} found.`.red);
+      return null;
+    }
+    
+    installPkg( ipfsAddress, wd, package_name );
+    
+    // var depFs = toInstall.map( addr => {
+    //   return ( cb ) => { 
+    //     var json = config.ipfs.catJsonSync( addr );
+    //     var files = config.ipfs.mapAddressToFileSync( json.root );
+    //     addToIgnore( _.keys(files) );
+    //     config.ipfs.checkoutFiles( config.working_dir++json.name+'-'+addr.slice(2,10), files, cb );
+    //     config.log('checking out files: ',files);
+    //   }
+    // });
+    //
+    // var parallelSync = deasync( async.parallel );
+    // var res = parallelSync(depFs);
   }
   
 

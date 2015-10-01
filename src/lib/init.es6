@@ -12,7 +12,7 @@ var init = function( config ) {
   let dirs = config.working_dir.split('/'); 
   let tmpProjectName = dirs[ dirs.length - 1 ];
   
-  var name = tmpProjectName;
+  var name = tmpProjectName.slice(0,32);
   var version = '0.1.0';
   var desc = '';
   
@@ -20,10 +20,14 @@ var init = function( config ) {
     name = readlineSync.question(`Name of your project [${tmpProjectName}]:`) || name;
     version = readlineSync.question(`Version [0.1.0]:`) || '0.1.0';
     desc = readlineSync.question(`Package description :`);
+    if( name.length > 32 ) {
+      console.log( 'WARN'.yellow + `: project name can be maximal 32 chars long! New name will be: "${name.slice(0,32)}"`);
+    }
   }
   
+  
   var json = {
-    name: name,
+    name: name.slice(0,32),
     version: version,
     description: desc,
     dependencies: {
