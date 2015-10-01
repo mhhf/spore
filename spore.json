@@ -9,5 +9,6 @@
   "ignore": [],
   "files": [
     "contracts/Spore.sol"
-  ]
+  ],
+  "tags": ["spore", "package manager"]
 }

@@ -57,7 +57,7 @@ var app = docopt.docopt(doc, {
   version: version
 });
 
-var config = CONFIG( app, { cli: true } );
+var config = CONFIG( app, { cli: true, version } );
 
 
 // var config = require( home + '/.sporerc.json' );

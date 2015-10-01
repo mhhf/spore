@@ -26,7 +26,13 @@
       "type": "object"
     },
     "contracts": {
-      "type": "object"
+      "type": "object",
+      "patternProperties": {
+        "^\\w+$": {
+          "type": "string",
+          "title": "ipfs-hash"
+        }
+      }
     },
     "root": {
       "type": "string",
@@ -36,7 +42,6 @@
       "type": "array"
     }
   },
-  "additionalProperties": false,
   "required": ["pv","name","solc","description","version","dependencies","contracts","root","tags"]
 
 }

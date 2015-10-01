@@ -135,6 +135,12 @@ var publish = function( config ){
   // external JSON
   var validateJson = function( working_dir, json ) {
     
+    var valide = tv4.validate( json, require('../specs/user_'+config.version+'.json') );
+    if( !valide ) {
+      console.log('ERROR'.red +': spore.json is not valide:\n' + tv4.error.message );
+      process.exit();
+    }
+    
     let files = json.files;
     
     // Check if any files are about to be included
@@ -167,22 +173,22 @@ var publish = function( config ){
     
     var rootHash = config.ipfs().addSync( working_dir + "/.spore/build/", {"r": true} );
     
-      fs.removeSync( working_dir + '/.spore' );
-     
-      // publish name and ipfs link to contract
-      var packageDirHash = rootHash.find( (o) => { return o.Name === 'build'; }).Hash;
-      
-      return packageDirHash;
-      
-    }
+    fs.removeSync( working_dir + '/.spore' );
+   
+    // publish name and ipfs link to contract
+    var packageDirHash = rootHash.find( (o) => { return o.Name === 'build'; }).Hash;
+    
+    return packageDirHash;
+    
+  }
 
-    var addJsonToIPFS = function( json ) {
+  var addJsonToIPFS = function( json ) {
       
-      var jsonHash = config.ipfs().addJsonSync( json );
-      
-      return jsonHash;
-      
-    }
+    var jsonHash = config.ipfs().addJsonSync( json );
+    
+    return jsonHash;
+    
+  }
 
 
 
@@ -223,6 +229,14 @@ var publish = function( config ){
   delete json.files;
   delete json.ignore;
   
+  json.pv = config.version;
+  
+
+  var valide = tv4.validate( json, require('../specs/ipfs_' + config.version + '.json') );
+  if( !valide ) {
+    console.log('ERROR'.red + ': Could not create package. Please report this!:\n'+tv4.error.message);
+    process.exit();
+  }
 
   var jsonHash = addJsonToIPFS( json );
     

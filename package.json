@@ -32,8 +32,11 @@
     "ipfs-api": "^2.3.0",
     "ipfs-js": "0.0.3",
     "merkle-patricia-tree": "^2.0.3",
+    "ministyle": "^0.1.4",
+    "miniwrite": "^0.1.4",
     "readline-sync": "^1.2.21",
     "tv4": "^1.2.5",
+    "tv4-reporter": "0.0.4",
     "underscore": "^1.8.3",
     "web3": "^0.12.2"
   },

@@ -28,7 +28,7 @@ describe('init', function() {
     });
     
     var json = require(`${working_dir}/spore.json`);
-    var spec = require('../src/user_spec.json');
+    var spec = require(`../src/specs/user_${config.version}.json`);
     
     var valide = tv4.validate( json, spec );
     
