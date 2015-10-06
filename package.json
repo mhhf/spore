@@ -1,6 +1,11 @@
 {
   "name": "eth-spore",
   "version": "0.0.4",
+  "spore": {
+    "ipfs_version": "0.0.3",
+    "client_version": "0.0.3",
+    "cli_version": "0.0.4"
+  },
   "description": "Spore - Simple package manager for Ethereum",
   "preferGlobal": true,
   "repository": {
@@ -9,7 +14,8 @@
   },
   "scripts": {
     "test": "mocha test",
-    "truffle": "truffle deploy -e production"
+    "truffle": "truffle deploy -e production",
+    "readme": "node scripts/gen_readme.jsx"
   },
   "keywords": [
     "ethereum",

@@ -6,58 +6,26 @@ var _      = require('underscore');
 var CONFIG = require( './src/lib/config.es6' );
 
 
-var version = '0.0.3';
+var __package = require('./package.json');
 
 
-
-var doc = `
-Simple package management for Ethereum
-
-Usage:
-  spore init
-  spore upgrade
-  spore publish 
-  spore add       <path>
-  spore link
-  
-  spore info     [<package>]
-  spore install   <package>
-  spore clone     <package>
-  spore uninstall <package>
-  
-  spore remote list
-  spore remote select <name>
-  spore remote add    <name>
-  spore remote remove <name>
-  
-  spore update
-  spore search <string>
-  
-  spore instance add <package> <address> --contract <contract>
-  spore instance list <package>
-  
-Arguments:
-  <package>                    Package name or hash
-  <path>                       path to file/ directory
-  <name>                       rpc settings name
-  
-Options:
-  -v, --version                Shows the version of spore
-  -h, --help                   Shows this help screen
-  --verbose                    Shows interlal logs
-`;
-
+var cli = fs.readFileSync('./src/specs/cli_0.0.4.docopt','utf8');
 
 // spore status
 
 
-var app = docopt.docopt(doc, {
+var app = docopt.docopt(cli, {
   argv: process.argv.slice(2),
   help: true,
-  version: version
+  version: __package.version
 });
 
-var config = CONFIG( app, { cli: true, version } );
+var config = CONFIG( app, { 
+  cli: true,
+  version:__package.version,
+  ipfs_version: __package.spore.ipfs_version,
+  client_version: __package.spore.client_version
+});
 
 
 // var config = require( home + '/.sporerc.json' );

@@ -34,41 +34,7 @@ ipfs daemon
 ```
 
 ```
-Simple package management for Ethereum
-
-Usage:
-  spore init
-  spore upgrade
-  spore publish 
-  spore add       <path>
-  spore link
-  
-  spore info     [<package>]
-  spore install   <package>
-  spore clone     <package>
-  spore uninstall <package>
-  
-  spore remote list
-  spore remote select <name>
-  spore remote add    <name>
-  spore remote remove <name>
-  
-  spore update
-  spore search <string>
-  
-  spore instance add <package> <address> --contract <contract>
-  spore instance list <package>
-  
-Arguments:
-  <package>                    Package name or hash
-  <path>                       path to file/ directory
-  <name>                       rpc settings name
-  
-Options:
-  -v, --version                Shows the version of spore
-  -h, --help                   Shows this help screen
-  --verbose                    Shows interlal logs
-
+{{ cli }}
 
 ```
 
@@ -177,21 +143,7 @@ Run the test:
 The ipfs-hash is pointing to a package-header which specified by [this](https://github.com/mhhf/spore/blob/master/src/ipfs_spec.json) json schema.
 An example header for `spore` is:
 ```js
-{
-  "name": "spore",
-  "version": "0.1.0",
-  "description": "Simple package manager for dapp development.",
-  "dependencies": {},
-  "contracts": [
-    "Spore"
-  ],
-  "ignore": [],
-  "files": [
-    "contracts/Spore.sol"
-  ],
-  "tags": ["spore", "package manager"]
-}
-
+{{ spore_json }}
 
 ```
 

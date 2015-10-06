@@ -18,7 +18,7 @@ function Package( config ) {
   }
   
   let json = JSON.parse(fs.readFileSync( config.working_dir + '/spore.json', 'utf8' ));
-  if( !tv4.validate( require(`../specs/user_${config.version}.json`), json ) ) throw tv4.error;
+  if( !tv4.validate( require(`../specs/user_${config.client_version}.json`), json ) ) throw tv4.error;
   
   // PKG_NAME -> BOOLEAN
   var isDependency = function( name ) {
