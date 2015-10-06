@@ -71,9 +71,9 @@ Options:
 ```
 
 ## GUI
+http://spore.memhub.io
 
-To it here for awesomeness (remember to set your ipfs cros settings correct): 
-`http://localhost:8080/ipfs/QmVdS8wJFFrcibvLnTZ7P33rN9LrhbujHpryAHkmfpX37e/`
+(Decentral version on IPFS will follow shortly)
 
 ### Workflow
 Create a new project:
@@ -173,30 +173,21 @@ Run the test:
 [This](https://github.com/mhhf/spore/blob/master/contracts/Spore.sol) Ethereum contract has a ` name => ipfs-hash ` mapping and some functionallity to access and manipulate it.
 
 The ipfs-hash is pointing to a package-header which specified by [this](https://github.com/mhhf/spore/blob/master/src/ipfs_spec.json) json schema.
-An example header for `mypackage` is:
+An example header for `spore` is:
 ```js
 {
-  "name": "mypackage",
+  "name": "spore",
   "version": "0.1.0",
-  "description": "description",
-  "dependencies": {
-    "LinkedList": "QmYSigzKBexCogT6Nsmpz89qJUYYMZgZu8bmxejyf6AkAk",
-    "mortal": "QmPtcRBPrTdV47s6iBTYcM72w6VmB3KmJ2VnyW1Zy3eu6A"
-  },
-  "contracts": {
-    "Example": {
-      "abi": [
-        {
-          "inputs": [],
-          "type": "constructor"
-        }
-      ],
-      "natspec": {
-        "methods": {}
-      }
-    }
-  },
-  "root": "QmYJikcCRVKKLjLJpg6mYCeyNpobLZFijLwE4gM8iS6mRw"
+  "description": "Simple package manager for dapp development.",
+  "dependencies": {},
+  "contracts": [
+    "Spore"
+  ],
+  "ignore": [],
+  "files": [
+    "contracts/Spore.sol"
+  ],
+  "tags": ["spore", "package manager"]
 }
 ```
 
