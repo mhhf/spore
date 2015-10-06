@@ -3,7 +3,9 @@ var deasync = require('deasync');
 var Instance = function( config ) {
   
   var Contract = require('../../contract_instance.json').Instance;
-  var instance = config.web3().eth.contract(Contract.abi).at(Contract.address);
+  var instance = config.web3().eth.contract( Contract.abi ).at( Contract.address );
+  
+  var code = config.web3().eth.getCode(Contract.address);
   
   var add = deasync( instance.add );
   var length = instance.length.call;

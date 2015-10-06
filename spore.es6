@@ -22,6 +22,7 @@ Usage:
   
   spore info     [<package>]
   spore install   <package>
+  spore clone     <package>
   spore uninstall <package>
   
   spore remote list
@@ -47,7 +48,6 @@ Options:
 `;
 
 
-// spore clone <package>
 // spore status
 
 

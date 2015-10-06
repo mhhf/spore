@@ -67,6 +67,7 @@ module.exports = function ( config, options ){
       web3.setProvider(new web3.providers.HttpProvider(`http://${host}:${port}`));
       web3.eth.defaultAccount = web3.eth.coinbase;
       web3Init = true;
+      cfg.log(web3.eth.getBlock(0).hash);
     }
     return web3;
   }

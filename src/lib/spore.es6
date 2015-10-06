@@ -10,6 +10,7 @@ var Spore = function ( config, address ){
   var address = Contract.address;
   var abi = Contract.abi;
   
+  
   if( config.web3().eth.getCode( address ) === "0x" ) {
     console.log(`No Spore contract found at ${address}`.red);
     process.exit();

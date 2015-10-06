@@ -1,4 +1,5 @@
 var emulator = require('./emulation.es6')();
+var deasync = require('deasync');
 
 // Test if the contract @addr is the deployed binary
 // @return boolean
@@ -31,7 +32,10 @@ module.exports = function( config ) {
   
   var bin = require('../../contract.json').Spore.binary;
   
-  config.contracts.instance().add( pkg, contract, addr );
+  var tx = config.contracts.instance().add( pkg, contract, addr, { gas: 700000 }  );
   
+  // console.log(tx);
+  
+  // config.web3().eth.getTransactionReceipt( tx );
   
 }

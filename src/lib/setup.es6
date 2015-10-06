@@ -7,6 +7,7 @@ var _            = require('underscore');
 
 var Ipfs         = require('./ipfs.es6');
 var web3         = require('web3');
+var colors       = require('colors');
 
 module.exports = function ( options ) {
   
@@ -15,15 +16,29 @@ module.exports = function ( options ) {
     
     var eth_host = 'localhost';
     var eth_port = '8545';
-    var spore_address = '0x47aaaad8b87f3224e0ed566fc3e8282673c5f610';
+    var spore_address = '0xfe463136af3fce0a1ce72463a33584b64936a353';
     
     if( options.cli ) {
     
       eth_host = readlineSync.question('Ethereum rpc host [localhost]: ') || 'localhost';
       eth_port = readlineSync.question('Ethereum rpc port [8545]: ') || '8545';
       // test rpc connection
+      // 
+      web3.setProvider(new web3.providers.HttpProvider(`http://${eth_host}:${eth_port}`)); 
       
-      spore_address = readlineSync.question('Please point to ethereum address:') || '0x47aaaad8b87f3224e0ed566fc3e8282673c5f610'; // testnet contract
+      try {
+        var bh = web3.getBlock(0).hash;
+        if( bh === '0x34288454de81f95812b9e20ad6a016817069b13c7edc99639114b73efbc21368' ) {
+          spore_address = '0xfe463136af3fce0a1ce72463a33584b64936a353'
+        } else {
+          console.log('ERROR'.red + ': Currently only the ConsenSys testnet chain is supported');
+          // spore_address = readlineSync.question('Please point to ethereum address:') || '0xfe463136af3fce0a1ce72463a33584b64936a353'; // testnet contract
+        }
+      } catch ( e ) {
+        console.log('ERROR'.red + ': Currently only the ConsenSys testnet chain is supported');
+      }
+      
+      
     }
     
     return {

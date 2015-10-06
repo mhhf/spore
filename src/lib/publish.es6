@@ -164,9 +164,10 @@ var publish = function( config ){
   var publishFiles = function( working_dir, json ) {
     
     // Create an ipfs dag node on folder
-    if( !fs.existsSync( working_dir + '/.spore') ) 
-      fs.mkdirSync( working_dir + '/.spore');
-    fs.mkdirSync( working_dir + '/.spore/build');
+    if( fs.existsSync( working_dir + '/.spore') ) 
+      fs.rmdirSync( working_dir + '/.spore');
+    fs.ensureDir( working_dir + '/.spore' );
+    fs.ensureDir( working_dir + '/.spore/build');
     json.files.forEach( ( file ) => {
       fs.copySync( working_dir + '/' + file, working_dir + '/.spore/build/' + file );
     });
@@ -198,6 +199,15 @@ var publish = function( config ){
        && addr != web3.eth.defaultAccount ) 
      throw new Error(`Package with name ${json.name} is already owned by ${addr}`);
   }
+  
+
+
+  // ======================================== BEGIN
+  
+
+
+
+
   
   // Check if spore.json has the right format
   // let json = JSON.parse(fs.readFileSync( working_dir + '/spore.json', 'utf8' ));
@@ -251,6 +261,7 @@ var publish = function( config ){
     console.log('brace yourself, gas will be spend!');
   
   var tx = config.contracts.spore().registerPackageSync( json.name, jsonHash, { gas: 300000 } );
+  config.log(tx);
 
   // var receipt = web3.eth.getTransactionReceipt( tx );
   // console.log( receipt );
