@@ -4,6 +4,7 @@ var SPORE           = require('./spore.es6');
 var Instance        = require('./instance.es6');
 var IPFS            = require('./ipfs.es6');
 var PKG             = require('./package.es6');
+var __package       = require('../../package.json');
 var colors          = require('colors');
 var web3            = require('web3');
 
@@ -11,7 +12,7 @@ var client_protocol_version = '0.0.3';
 var ipfs_protocol_version = '0.0.3';
 
 var working_dir = process.env.SPORE_WORKING_DIR;
-var npm_location = process.env.SPORE_NPM_LOCATION;
+var npm_location = process.env.SPORE_NPM_LOCATION || __dirname; 
 var home = process.env.HOME || process.env.USERPROFILE;
 
 var config_location = npm_location + '/.spore.json';
@@ -39,7 +40,14 @@ module.exports = function ( config, options ){
   }
   loadConfig();
   
-  var cfg = _.extend( config || {}, env, options ); 
+  
+  
+  var cfg = _.extend( config || {}, env, options, {
+    version: __package.version,
+    client_version: __package.spore.client_version,
+    ipfs_version: __package.spore.ipfs_version
+  }); 
+  
   if( !cfg.working_dir && working_dir ) cfg.working_dir = working_dir;
   
   cfg.logger = require('./log.es6')( cfg );
@@ -52,7 +60,6 @@ module.exports = function ( config, options ){
       try {
         var res = ipfs.addJsonSync({});
       } catch ( e ) {
-        console.log(e);
         console.log('Error: '.red + 'No IPFS connection could be established. Is the daemon running on localhost?');
         process.exit();
       }  
@@ -74,8 +81,8 @@ module.exports = function ( config, options ){
       }
 
       web3.eth.defaultAccount = web3.eth.coinbase;
-      web3Init = true;
-      cfg.log(web3.eth.getBlock(0).hash);
+      if( !(/TestRPC/).test( web3.version.client ) )
+        cfg.log(web3.eth.getBlock(0).hash.toString());
     }
     return web3;
   }

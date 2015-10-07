@@ -1,6 +1,6 @@
 {
   "name": "eth-spore",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "spore": {
     "ipfs_version": "0.0.3",
     "client_version": "0.0.3",
@@ -13,7 +13,7 @@
     "url": "https://github.com/mhhf/spore.git"
   },
   "scripts": {
-    "test": "mocha test",
+    "test": "sh ./test.sh",
     "truffle": "truffle deploy -e production",
     "readme": "node scripts/gen_readme.jsx"
   },
@@ -35,7 +35,7 @@
     "ethereumjs-vm": "git+https://github.com/ethereum/ethereumjs-vm.git",
     "file": "^0.2.2",
     "fs-extra": "^0.24.0",
-    "ipfs-api": "^2.3.0",
+    "ipfs-api": "^2.4.0",
     "ipfs-js": "0.0.3",
     "merkle-patricia-tree": "^2.0.3",
     "ministyle": "^0.1.4",

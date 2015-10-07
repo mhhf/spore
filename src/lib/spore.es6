@@ -2,16 +2,16 @@ var deasync = require('deasync');
 var colors  = require('colors');
 
 
-var Spore = function ( config, address ){
+var Spore = function ( config ){
   // var settings = require("../../config/app.json");
 
   var Contract = require('../../contract.json').Spore;
 
-  var address = Contract.address;
+  var address = process.env.SPORE_ADDRESS || Contract.address;
   var abi = Contract.abi;
   
   
-  if( config.web3().eth.getCode( address ) === "0x" ) {
+  if( !process.env.SPORE_ADDRESS && config.web3().eth.getCode( address )  === "0x" ) {
     console.log(`No Spore contract found at ${address}`.red);
     process.exit();
   }

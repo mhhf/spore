@@ -9,7 +9,7 @@ var CONFIG = require( './src/lib/config.es6' );
 var __package = require('./package.json');
 
 
-var cli = fs.readFileSync('./src/specs/cli_0.0.4.docopt','utf8');
+var cli = fs.readFileSync(__dirname + `/src/specs/cli_${__package.spore.cli_version}.docopt`,'utf8');
 
 // spore status
 
@@ -21,10 +21,7 @@ var app = docopt.docopt(cli, {
 });
 
 var config = CONFIG( app, { 
-  cli: true,
-  version:__package.version,
-  ipfs_version: __package.spore.ipfs_version,
-  client_version: __package.spore.client_version
+  cli: true
 });
 
 

@@ -22,7 +22,6 @@ describe('spore#install', function() {
     scenarios.setupAll();
     
     config.working_dir =  __dirname+'/.scenarios/a';
-    
     // PUBLISH A
     scenarios.setup( 'a' );
     init( config );

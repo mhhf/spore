@@ -3,7 +3,7 @@ var chai = require('chai');
 var should = require('should');
 var tv4 = require('tv4');
 
-var schema = require('../src/user_spec.json');
+// var schema = require('../src/user_spec.json');
 chai.should();
 
 

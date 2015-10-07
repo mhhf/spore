@@ -135,7 +135,7 @@ var publish = function( config ){
   // external JSON
   var validateJson = function( working_dir, json ) {
     
-    var valide = tv4.validate( json, require('../specs/user_'+config.client_verion+'.json') );
+    var valide = tv4.validate( json, require('../specs/user_'+config.client_version+'.json') );
     if( !valide ) {
       console.log('ERROR'.red +': spore.json is not valide:\n' + tv4.error.message );
       process.exit();
