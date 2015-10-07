@@ -1,6 +1,6 @@
 {
   "name": "eth-spore",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "spore": {
     "ipfs_version": "0.0.3",
     "client_version": "0.0.3",
@@ -32,7 +32,6 @@
     "colors": "^1.1.2",
     "deasync": "^0.1.1",
     "docopt": "^0.6.2",
-    "ethereumjs-vm": "git+https://github.com/ethereum/ethereumjs-vm.git",
     "file": "^0.2.2",
     "fs-extra": "^0.24.0",
     "ipfs-api": "^2.4.0",
