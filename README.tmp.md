@@ -19,21 +19,23 @@ $ node --version
 v4.0.0
 ```
 
-Install [ipfs](https://ipfs.io/docs/install/).
-
-Install via: `npm i -g eth-spore`
+Install Spore: 
+```
+npm i -g eth-spore
+```
 
 On your first run spore will guide you trough a eth-rpc and ipfs configuration.
-Currently a contract is located at **0x774b349719f8007bb479c5721e510d4803385d04** on the ConsenSys testnet.
 
+
+For full decentral usage:
+* install [ipfs](https://ipfs.io/docs/install/).
+* install [ethereum rpc node](https://ipfs.io/docs/install/)
 
 ## Usage
-Run your local ipfs gateway and rpc client in seperate terminals:
-```
-ipfs daemon
-```
 
 ```
+$ spore --help
+
 {{ cli }}
 
 ```
@@ -41,6 +43,7 @@ ipfs daemon
 ## GUI
 http://spore.memhub.io
 
+![](gui.png)
 (Decentral version on IPFS will follow shortly)
 
 ### Workflow
@@ -87,6 +90,9 @@ Now you can install the package `mypackage` along with it's dependencies in anot
 spore install new
 ```
 
+## API documentation
+
+{{api_doc}}
 
 ## Development - Installation
 This will guide you trough a **local** development installation. The contract is not deployed on a global chain, yet.

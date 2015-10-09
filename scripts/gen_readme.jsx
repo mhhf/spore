@@ -22,10 +22,12 @@ var tmp                       = _.template( raw_tmp );
 var cli                       = fs.readFileSync(`src/specs/cli_${cli_v}.docopt`, 'utf8');
 // | Load spore pkg json
 var spore_json                = fs.readFileSync('spore.json', 'utf8');
+// | Load API doc
+var api_doc                   = fs.readFileSync('doc/api.md','utf8');
 
 
 // Create template object
-var obj                       = { cli, spore_json };
+var obj                       = { cli, spore_json, api_doc };
 
 // Generate readme text
 var readme                    = tmp( obj );

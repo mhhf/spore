@@ -14,7 +14,7 @@ var install = function( config ){
   if( config['<package>'] ) {
     config.pkg().installDep( 'spore_packages', config['<package>'] );
     config.pkg().saveJson();
-    if( config.cli ) console.log( `Package ${config.package_name} installed.` );
+    if( config.cli ) console.log( `Package ${config['<package>']} installed.` );
   } else {
     require('./upgrade.es6')( config );
   }
