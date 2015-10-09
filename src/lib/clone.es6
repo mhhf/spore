@@ -33,7 +33,8 @@ var clone = function( config ){
   header.files = Object.keys( header.files );
   
   fs.writeFileSync( config.working_dir + '/' + name + '/spore.json', JSON.stringify(header,false,2) );
-
+  
+  return true;
 };
 
 module.exports = clone;

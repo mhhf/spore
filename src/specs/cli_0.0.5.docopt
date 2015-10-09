@@ -8,7 +8,7 @@ Usage:
   spore link
   
   spore info     [<package>]
-  spore install   <package>
+  spore install  [<package>]
   spore clone     <package>
   spore uninstall <package>
   

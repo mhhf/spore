@@ -10,11 +10,15 @@ var _               = require('underscore');
 
 var install = function( config ){
   
-  config.pkg().installDep( 'spore_packages', config.package_name );
+  var pkgs;
+  if( config['<package>'] ) {
+    config.pkg().installDep( 'spore_packages', config['<package>'] );
+    config.pkg().saveJson();
+    if( config.cli ) console.log( `Package ${config.package_name} installed.` );
+  } else {
+    require('./upgrade.es6')( config );
+  }
   
-  config.pkg().saveJson();
-  
-  if( config.cli ) console.log( `Package ${config.package_name} installed.` );
 
 };
 

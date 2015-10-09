@@ -51,9 +51,7 @@ if( app.init ) { //======================================================== INIT
  
 } else if( app.install ) { //=========================================== INSTALL
   
-  let package_name = app['<package>'];
-  
-  require( './src/lib/install.es6' )( _.extend( config, {package_name}) );
+  require( './src/lib/install.es6' )( config );
 
 } else if( !app.remote && !app.instance && app.add ) { //=================== ADD
   
@@ -86,7 +84,8 @@ if( app.init ) { //======================================================== INIT
 
 } else if( app.clone ) { // ============================================== CLONE
 
-  require('./src/lib/clone.es6')( config );
+  var cloned = require('./src/lib/clone.es6')( config );
+  if( cloned ) console.log(`${config['<package>']} cloned!`);
 
 } else if( app.instance && app.add ) { //========================== INSTANCE ADD
   
