@@ -3,7 +3,8 @@
   "properties": {
     "name": {
       "type": "string",
-      "title": "name"
+      "title": "name",
+      "description": ""
     },
     "description": {
       "type": "string",

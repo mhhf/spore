@@ -3,7 +3,6 @@
 var deasync         = require('deasync');
 
 var info = function( config ) {
-  
   var pkg = config['<package>'];
   if( pkg ) {
     if( pkg.length <= 32 ) // Is pkg a name or an IPFS hash?

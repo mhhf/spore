@@ -58,9 +58,9 @@ module.exports = function ( config, options ){
     if( !ipfs ) {
       ipfs = IPFS( cfg.ipfs_host, cfg.ipfs_port );
       try {
-        var res = ipfs.addJsonSync({});
+        var res = ipfs.catSync('QmeomffUNfmQy76CQGy9NdmqEnnHU9soCexBnGU3ezPHVH')
       } catch ( e ) {
-        console.log('Error: '.red + 'No IPFS connection could be established. Is the daemon running on localhost?');
+        console.log('Error: '.red + 'No IPFS connection could be established. Is the daemon running on localhost?', e);
         process.exit();
       }  
     }
@@ -79,7 +79,7 @@ module.exports = function ( config, options ){
         console.log('ERROR'.red+`: can't connect to rpc network on ${host}:${port}.`);
         process.exit();
       }
-
+      
       web3.eth.defaultAccount = web3.eth.coinbase;
       if( !(/TestRPC/).test( web3.version.client ) )
         cfg.log(web3.eth.getBlock(0).hash.toString());
@@ -100,6 +100,7 @@ module.exports = function ( config, options ){
   cfg.addChain = function( name ) {
     var chain = Setup.addChain();
     env.chains[name] = chain;
+    if( Object.keys(env.chains).length === 1 ) env.selected = name;
     saveConfig();
   }
   

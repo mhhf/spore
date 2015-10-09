@@ -1,10 +1,10 @@
 {
   "name": "eth-spore",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "spore": {
     "ipfs_version": "0.0.3",
     "client_version": "0.0.3",
-    "cli_version": "0.0.4"
+    "cli_version": "0.0.5"
   },
   "description": "Spore - Simple package manager for Ethereum",
   "preferGlobal": true,
@@ -15,7 +15,8 @@
   "scripts": {
     "test": "sh ./test.sh",
     "truffle": "truffle deploy -e production",
-    "readme": "node scripts/gen_readme.jsx"
+    "readme": "node scripts/gen_readme.jsx",
+    "doc": "node scripts/coin_tutorial.jsx"
   },
   "keywords": [
     "ethereum",
@@ -36,10 +37,13 @@
     "fs-extra": "^0.24.0",
     "ipfs-api": "^2.4.0",
     "ipfs-js": "0.0.3",
+    "leveldown": "^1.4.1",
+    "levelup": "^1.2.1",
     "merkle-patricia-tree": "^2.0.3",
     "ministyle": "^0.1.4",
     "miniwrite": "^0.1.4",
     "readline-sync": "^1.2.21",
+    "shelljs": "^0.5.3",
     "tv4": "^1.2.5",
     "tv4-reporter": "0.0.4",
     "underscore": "^1.8.3",

@@ -4,6 +4,7 @@ var readlineSync = require('readline-sync');
 var fs           = require('fs-extra');
 var path         = require('path');
 var _            = require('underscore');
+require('shelljs/global');
 
 var Ipfs         = require('./ipfs.es6');
 var web3         = require('web3');
@@ -12,32 +13,36 @@ var colors       = require('colors');
 module.exports = function ( options ) {
   
   
+  var getAddrForChain = function( web3 ) {
+    var bh = web3.eth.getBlock(0).hash;
+    if( bh === '0x34288454de81f95812b9e20ad6a016817069b13c7edc99639114b73efbc21368' ) {
+      return '0x774b349719f8007bb479c5721e510d4803385d04';
+    } else {
+      console.log('ERROR'.red + ': Unknown chain. Currently only the ConsenSys testnet chain is supported');
+      process.exit();
+    }
+  }
+  
   var addChain = function() {
     
     var eth_host = 'localhost';
     var eth_port = '8545';
-    var spore_address = '0xfe463136af3fce0a1ce72463a33584b64936a353';
+    var spore_address = '0x774b349719f8007bb479c5721e510d4803385d04';
     
     if( options.cli ) {
     
-      eth_host = readlineSync.question('Ethereum rpc host [localhost]: ') || 'localhost';
+      eth_host = readlineSync.question('Ethereum rpc host ( xxx.xxx.xxx.xxx ): ') || '';
       eth_port = readlineSync.question('Ethereum rpc port [8545]: ') || '8545';
       // test rpc connection
       // 
       web3.setProvider(new web3.providers.HttpProvider(`http://${eth_host}:${eth_port}`)); 
       
-      try {
-        var bh = web3.getBlock(0).hash;
-        if( bh === '0x34288454de81f95812b9e20ad6a016817069b13c7edc99639114b73efbc21368' ) {
-          spore_address = '0xfe463136af3fce0a1ce72463a33584b64936a353'
-        } else {
-          console.log('ERROR'.red + ': Currently only the ConsenSys testnet chain is supported');
-          // spore_address = readlineSync.question('Please point to ethereum address:') || '0xfe463136af3fce0a1ce72463a33584b64936a353'; // testnet contract
-        }
-      } catch ( e ) {
-        console.log('ERROR'.red + ': Currently only the ConsenSys testnet chain is supported');
+      if( web3.isConnected() ) {
+        spore_address = getAddrForChain( web3 );
+      } else {
+        console.log(`ERROR`.red + `: Could not connect to ${eth_host}:${eth_port}. Verify you rpc node is running.`);
+        process.exit();
       }
-      
       
     }
     
@@ -51,8 +56,8 @@ module.exports = function ( options ) {
   
   var setupIpfs = function() {
     
-    var ipfs_host = 'localhost';
-    var ipfs_port = '5001';
+    var ipfs_host = 'gateway.ipfs.io';
+    var ipfs_port = '80';
     
     if ( options.cli ) {
       ipfs_host = readlineSync.question('IPFS host [localhost]: ') || 'localhost';
@@ -66,15 +71,65 @@ module.exports = function ( options ) {
   }
   
   var setupAll = function() {
-    console.log('You are running spore for the first time. A configuration file will be created in ~/.spore.json');
+    console.log('You are running spore for the first time. This will guide you trough the setup.');
     
-    var obj = setupIpfs();
-    var name = 'origin';
-    if( options.cli )
-      name     = readlineSync.question('Name for your chain and spore contract [origin]: ') || 'origin';
-    obj.chains = {};
-    obj.chains[name] = addChain(name);
-    obj.selected = name;
+    var obj = {};
+    
+    // Is IPFS Installed?
+    if( !which('ipfs') ) { // No
+      console.log(`No IPFS found on your system.
+Will use trusted gateway.ipfs.io as default.
+With this, you won't be able to publish packages.
+Please install IPFS ( http://ipfs.io/docs/install ) and use the daemon on localhost, 
+if you whish to publish packages or use spore in a decentralized way.\n`);
+      obj.ipfs_host = 'gateway.ipfs.io';
+      obj.ipfs_port = '80';
+    } else {
+      var apiAddress = JSON.parse( exec('ipfs config show', {silent:true}).output ).Addresses.API.split('/');
+      obj.ipfs_host = apiAddress[2];
+      obj.ipfs_port = apiAddress[4];
+      console.log('SUCCESS'.green + `: Found ipfs on ${obj.ipfs_host}:${obj.ipfs_port}`);
+      if( !pingIpfs( obj.ipfs_host, obj.ipfs_port ) ) {
+        console.log('WARN'.yellow + ": Keep in mind to run `ipfs daemon` in the background, do be able to use spore.");
+      }
+    }
+    
+    
+    web3.setProvider(new web3.providers.HttpProvider(`http://localhost:8545`));
+    if( !web3.isConnected() ) {
+      console.log("WARN".yellow + `: Could not find a rpc connection on localhost:8545.`);
+      console.log(`If no chain information are provided this will use spore.memhub.io rpc client as default.`);
+      console.log(`The remote client will be only available during an alpha test phase 
+and only as long as it remains stable. It can be removed on any time. With this client 
+you won't be able to publish packages. The usage of an own rpc node is highly recomended.`);
+      var point = readlineSync.question('Do you want to to link to an own rpc chain? (y/n): ');
+      if( (/^y/).test(point) ) {
+        var name = 'origin';
+        if( options.cli )
+          name     = readlineSync.question('Name for your chain and spore contract [origin]: ') || 'origin';
+        obj.chains = {};
+        obj.chains[name] = addChain(name);
+        obj.selected = name;
+      } else {
+        obj.chains = {};
+        obj.chains['origin'] = {
+          host: 'spore.memhub.io',
+          port: '8545',
+          address: '0x774b349719f8007bb479c5721e510d4803385d04'
+        };
+        obj.selected = 'origin';
+      }
+    } else {
+      console.log('SUCCESS'.green + ` Found rpc client on localhost:8545`);
+      obj.chains = {};
+      obj.selected = 'origin';
+      obj.chains['origin'] = {
+        host: 'localhost',
+        port: 'port',
+        address: getAddrForChain( web3 )
+      };
+    }
+    
     
     return obj;
   }
@@ -87,7 +142,7 @@ module.exports = function ( options ) {
       var c = web3.version.client;
     } catch ( e ) {
       if( options.cli )
-        console.log( "Cannot reach etheruem rpc server, please verify its running." );
+        console.log( "Cannot reach etheruem rpc server, please verify it is running." );
       return false;
     }
     
@@ -104,11 +159,9 @@ module.exports = function ( options ) {
   var pingIpfs = function( host, port ) {
     let ipfs = Ipfs( host, port );
     try {
-      let addr = ipfs.addSync('test');
+      var res = ipfs.catSync('QmeomffUNfmQy76CQGy9NdmqEnnHU9soCexBnGU3ezPHVH')
       return true;
     } catch ( e ) {
-      if( options.cli )
-        console.log( "Cannot reach ipfs deamon, try again." );
       return false;
     }
   }

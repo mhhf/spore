@@ -33,8 +33,8 @@ module.exports = function( config ) {
   .filter( f => (/\.sol$/).test( f ) ) // Filter solidity files
   .forEach( file => {
     // get relative path
-    var rel = path.relative( config.working_dir, path.dirname(file) );
-    var revrel = path.relative( path.dirname(file), config.working_dir );
+    var rel = path.relative( config.working_dir, config.working_dir+'/'+path.dirname(file) );
+    var revrel = path.relative( config.working_dir+'/'+path.dirname(file), config.working_dir );
     // grab all imports
     var content = fs.readFileSync( file, 'utf8' );
     var content_ = content.replace( /import ('|")[^'"]+('|");/g, (match) => {
@@ -69,6 +69,7 @@ module.exports = function( config ) {
         config.log('found', found);
         
         if( found.length == 1 ) {
+          // var normal = path.normalize('${revrel}/${found[0]}');
           console.log(`Changed import in ${file} to ${revrel}/${found[0]}`);
           return `import "${revrel}/${found[0]}";`;
         } else if( found.length == 0) {

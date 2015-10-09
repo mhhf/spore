@@ -10,5 +10,8 @@
   "files": [
     "contracts/Spore.sol"
   ],
-  "tags": ["spore", "package manager"]
+  "tags": [
+    "spore",
+    "package manager"
+  ]
 }

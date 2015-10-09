@@ -12,13 +12,14 @@ module.exports = function( config ) {
   var npm_location = process.env.SPORE_NPM_LOCATION;
   if( fs.existsSync( npm_location + '/db.json' ) ) {
     var db = JSON.parse(fs.readFileSync( npm_location + 'db.json' ));
+    console.log(`last update from ${db.updated}`);
     
     var res = {};
-    _.each(db, function( obj, hash) {
+    _.each(db.pkgs, function( obj, hash ) {
       if( 
          obj.name.indexOf(str) > -1 
            || obj.header.description.indexOf(str)> -1
-           || obj.header.tags.indexOf(str)
+           || obj.header.tags.indexOf(str) > -1
         ) {
           res[ obj.name ] = {
             desc: obj.header.description
@@ -36,6 +37,8 @@ module.exports = function( config ) {
       console.log(`No package found for search "${str}"`);
     }
     
+  } else {
+    console.log(`No Packages in the database. Update the database with 'spore update'.`)
   }
   
 }

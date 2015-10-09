@@ -172,7 +172,13 @@ var publish = function( config ){
       fs.copySync( working_dir + '/' + file, working_dir + '/.spore/build/' + file );
     });
     
-    var rootHash = config.ipfs().addSync( working_dir + "/.spore/build/", {"r": true} );
+    try {
+      var rootHash = config.ipfs().addSync( working_dir + "/.spore/build/", {"r": true} );
+    } catch( e ) {
+      fs.removeSync( working_dir + '/.spore' );
+      console.log('ERROR'.red+': No connection to ipfs could be setablished. Is the ipfs daemon running?');
+      process.exit();
+    }
     
     fs.removeSync( working_dir + '/.spore' );
    
@@ -259,6 +265,10 @@ var publish = function( config ){
   // Inform the user about the gas price
   if( config.cli )
     console.log('brace yourself, gas will be spend!');
+  
+  // malform
+  // console.log(jsonHash);
+  // jsonHash = jsonHash.slice(0,2)+"Q"+jsonHash.slice(3);
   
   var tx = config.contracts.spore().registerPackageSync( json.name, jsonHash, { gas: 300000 } );
   config.log(tx);
