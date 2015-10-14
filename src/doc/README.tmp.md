@@ -26,6 +26,10 @@ npm i -g eth-spore
 
 On your first run spore will guide you trough a eth-rpc and ipfs configuration.
 
+Currently it is optimized for [truffle](https://github.com/ConsenSys/truffle), you may want to install truffle as well: 
+```
+npm -g i truffle
+```
 
 For full decentral usage:
 * install [ipfs](https://ipfs.io/docs/install/).
@@ -64,14 +68,28 @@ this will create a spore.json in your root project directory:
   "dependencies": {},
   "contracts": [],
   "ignore": [],
-  "files": []
+  "files": [],
+  "tags": []
 }
 ```
 
-install dependencies:
+install a dependency:
 ```
-spore install LinkedList
 spore install mortal
+```
+
+import dependency to your contract: `contracts/mcontract.sol`
+```
+import "mortal";
+
+contract mycontract is mortal {
+...
+
+```
+
+link the dependencies:
+```
+spore link
 ```
 
 add some files:
@@ -87,12 +105,12 @@ spore publish
 
 Now you can install the package `mypackage` along with it's dependencies in another project via:
 ```
-spore install new
+spore install mypackage
 ```
 
 ## API documentation
 
-{{api_doc}}
+[Read the Full API Documentation here.](doc/api.md)
 
 ## Development - Installation
 This will guide you trough a **local** development installation. The contract is not deployed on a global chain, yet.

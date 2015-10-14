@@ -307,8 +307,8 @@ spore remote remove origin
 spore update
 ```
 
-Fetches all packages and their headers to a local database to make them searchable.
-Currently in alpha and not production ready.
+Fetches **all** packages and their headers to a local database to make them searchable.
+Currently in alpha and not production ready. This may take a while.
 
 ##### Example
 ```

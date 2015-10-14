@@ -14,7 +14,7 @@ var client_v                  = __package.spore.client_version;
 var ipfs_v                    = __package.spore.ipfs_version;
 
 // Load Readme template
-var raw_tmp                   = fs.readFileSync('README.tmp.md', 'utf8');
+var raw_tmp                   = fs.readFileSync('src/doc/README.tmp.md', 'utf8');
 var tmp                       = _.template( raw_tmp );
 
 // Configure template options
@@ -23,6 +23,7 @@ var cli                       = fs.readFileSync(`src/specs/cli_${cli_v}.docopt`,
 // | Load spore pkg json
 var spore_json                = fs.readFileSync('spore.json', 'utf8');
 // | Load API doc
+// TODO - remove?
 var api_doc                   = fs.readFileSync('doc/api.md','utf8');
 
 
