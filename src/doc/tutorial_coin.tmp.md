@@ -1,5 +1,10 @@
 ## Making a custom Coin contract with spore and truffle
 
+<!-- One of the basic features of the blockchain technology was the idea of a decentral value exchange.  -->
+<!-- Bitcoin in its basic interpretation represents a currency where a user ballance and can transfear  -->
+<!-- it to another user. -->
+
+
 ### Setting up truffle and spore
 
 Here we make a custom Coin contract, test it, and make a package for others to use.
@@ -36,21 +41,90 @@ Great. Now you have all package headers in your local databse. Lets search for c
 
 {{> spore search coin}}
 
-Awesome 
+Awesome, there is already a coin package out there which we will use as a basis for own implementation.
 
-<Found Coin Interface, and SimpleCoin implementation>
-<info>
+Lets look on the details of this package:
+
+{{> spore info coin }}
 
 ### Clone
-<clone coin>
+Now we can clone this package to change it.
 
-### Install
-<install mortal>
+{{> spore clone coin }}
+
+this will create a `coin` directory containing all package files. In this tutorial
+we will use truffle as our dev-framework, so we need to make a truffle project out of coin:
+{{> cd coin }}
+{{> truffle init }}
+With some cleanup
+{{> rm test/example.js }}
+{{> rm contracts/Example.sol }}
+
+Truffle uses the information in `config/app.json` on which contract to deploy, so we need to put our coin contract in here:
+
+{{!> sed -i.bak 's/Example/currency/g' config/app.json && rm config/app.json.bak }}
+
+```
+  ...
+  "deploy": [
+    "currency"
+  ],
+  ...
+```
+
+Now we want to extend the coin contract such, that we still have the power to destroy it.
+For this, tere is also already a package which allows the creator of an contract to destroy it.
+
+{{> spore info mortal }}
+
+Take a notice here, that a contract which is mortal has also be owned by somebody, 
+therefore the package **mortal** is dependend on the package **owned**.
+
+First we have to install this package:
+
+{{> spore install mortal }}
+
+After this, we have to import and assign mortal to our contract `contracts/currency.sol`. The end result has to look like this:
+
+{{!> sed -i.bak 's/contract currency {/import "mortal";\'$'\ncontract currency is mortal {/g' contracts/currency.sol && rm contracts/currency.sol.bak }}
+
+{{> head -5 contracts/currency.sol}}
+
+Take a notice here, that although we imported our mortal contract, its location 
+is still somewhere in the `spore_packages` directory. To point the compiler
+to the right file, we can simply use the `spore link` command which resolves all
+missing imports with the correct ones:
+
+{{> spore link }}
+
+This will leave `contracts/coin.sol` with: 
+
+{{> head -5 contracts/currency.sol }}
 
 ### Compile/Deploy
-<test>
+Now we are ready to go and write some tests on our mortal coin contract:
+`test/mortalcoin.js`
+
+{{!> ipfs cat QmUPZhvbrbrvCBV6Q1X5nf8dZKLqa5cbDEUJceobqoSrHr|dd  of=test/mortalcoin.js }}
+
+{{> cat test/mortalcoin.js }}
+
+test it:
+{{> truffle test }}
+
+and deploy it if you like:
+
+`truffle deploy -e production`
 
 ### Publish
-<change readme, package to customcoin>
-<publish>
+If you want to allow others the usage of **mortalcoin** along with your test
+you can publish it as a package:
+Change the name of the project from coin to mortalcoin in your `spore.json` file.
+Include the tests file with:
+
+{{> spore add test/ }}
+
+And publish your package:
+
+` spore publish `
 

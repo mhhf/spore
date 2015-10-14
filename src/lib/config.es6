@@ -15,7 +15,7 @@ var working_dir = process.env.SPORE_WORKING_DIR;
 var npm_location = process.env.SPORE_NPM_LOCATION || __dirname; 
 var home = process.env.HOME || process.env.USERPROFILE;
 
-var config_location = npm_location + '/.spore.json';
+var config_location = home + '/.sporerc';
 
 var env; // = require( home + '/.spore.json' );
 
@@ -81,8 +81,8 @@ module.exports = function ( config, options ){
       }
       
       web3.eth.defaultAccount = web3.eth.coinbase;
-      if( !(/TestRPC/).test( web3.version.client ) )
-        cfg.log(web3.eth.getBlock(0).hash.toString());
+      // if( !(/TestRPC/).test( web3.version.client ) )
+      //   cfg.log(web3.eth.getBlock(0).hash.toString());
     }
     return web3;
   }

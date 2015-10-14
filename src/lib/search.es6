@@ -1,5 +1,6 @@
 var fs = require('fs-extra');
 var _  = require('underscore');
+var moment = require('moment');
 
 module.exports = function( config ) {
   
@@ -12,7 +13,7 @@ module.exports = function( config ) {
   var npm_location = process.env.SPORE_NPM_LOCATION;
   if( fs.existsSync( npm_location + '/db.json' ) ) {
     var db = JSON.parse(fs.readFileSync( npm_location + 'db.json' ));
-    console.log(`last update from ${db.updated}`);
+    console.log(`last update was ${moment(db.updated).fromNow()}`);
     
     var res = {};
     _.each(db.pkgs, function( obj, hash ) {

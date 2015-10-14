@@ -1,6 +1,7 @@
 require('shelljs/global');
 var _ = require('underscore');
 var fs = require('fs');
+require('colors');
 
 // Set template to Mustache
 _.templateSettings = {
@@ -8,14 +9,28 @@ _.templateSettings = {
 };
 
 // TODO - remove database
+// TODO - refactor template indocator from mustashe to default markdown ```bash...```
 
 var c = function( str ) {
   return "```\n"+str+"\n```";
 }
 
-var e = function( str ) {
-  var res = exec(str).output;
-return `\`\`\`
+var e = function( str, silent ) {
+  var res = exec(str, {silent: true}).output;
+  res = res
+  .replace(/\u0000/g,'') // Remove all blakn chars
+  .replace(/\x1b\[\d\d?m/g,''); // Remove all colored outputs
+  
+  console.log('----------');
+  console.log('>', str);
+  console.log(res);
+  console.log('----------');
+  
+  
+  
+  if(silent) return '';
+  
+return `\`\`\`bash
 $ ${str}
 ${res}
 \`\`\``;
@@ -27,15 +42,38 @@ var raw_tmp = fs.readFileSync('src/doc/tutorial_coin.tmp.md', 'utf8');
 
 // clean local spore setup
 rm('db.json');
-rm('.spore.json');
+rm('~/.sporerc');
 /// co to neutral directory 
 mkdir ("tmp");
 cd ("tmp");
 
 
-var processed_tmp = raw_tmp.replace(/\{\{\>([^}]*)\}\}/g, function( find, exec ){
-  return e(exec);
+var processed_tmp = raw_tmp.replace(/\{\{([^}]*)\}\}/g, function( find, exec ){
+
+  var silent = false;
+  if( (/^\>/).test(exec) ) {
+    exec = exec.slice(1);
+  } else if( (/^\!\>/).test(exec) ) {
+    exec = exec.slice(2);
+    silent = true;
+  } else {
+    console.log('ERR'.red + " ", exec);
+  }
+
+  if(exec === ' cd coin ') {
+    cd('coin'); 
+    return '\n```\n$ cd coin\n```\n'
+  }
+  return e(exec, silent);
 });
+
+// console.log("\n\n\n\n");
+// console.log("\n\n\n\n");
+// console.log("\n\n\n\n");
+// console.log(processed_tmp)
+// console.log("\n\n\n\n");
+// console.log("\n\n\n\n");
+// console.log("\n\n\n\n");
 
 var tmp     = _.template( processed_tmp );
 
@@ -46,6 +84,4 @@ cd ( wd );
 // Save Tutorial
 fs.writeFileSync('doc/tutorial_coin.md', doc);
 
-rm ('-fdR','tmp');
-
-
+rm ('-fR','tmp');

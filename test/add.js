@@ -18,10 +18,6 @@ chai.should();
 var working_dir = __dirname + '/.scenarios/a';
 var config = CONFIG( { working_dir }, { cli: false } );
 
-// var home = process.env.HOME || process.env.USERPROFILE;
-// var env = require( home + '/.spore.json' );
-// var config = require( '../src/lib/config.es6' )( env );
-
 describe('spore#add', function() {
   
   
