@@ -16,10 +16,20 @@ module.exports = function ( options ) {
   var getAddrForChain = function( web3 ) {
     var bh = web3.eth.getBlock(0).hash;
     if( bh === '0x34288454de81f95812b9e20ad6a016817069b13c7edc99639114b73efbc21368' ) {
+      // Consensys Testnet 
       return '0x774b349719f8007bb479c5721e510d4803385d04';
+    } else if ( bh === '0xd4e56740f876aef8c010b86a40d5f56745a118d0906a34e69aec8c0db1cb8fa3' ) {
+      // Frontier
+      return '0x5067247f2214dca445bfb213277b5f19711e309f';
     } else {
-      console.log('ERROR'.red + ': Unknown chain. Currently only the ConsenSys testnet chain is supported');
-      process.exit();
+      console.log('WARN'.yellow + ': Unknown chain.');
+      var address = readlineSync.question('Point to the spore contract on this chain ( 0xXX..XX ): ') || '';
+      if( web3.isAddress( address ) && web3.eth.getCode( address ).length > 2 ) {
+        return address;
+      } else {
+        console.log('ERROR'.red+`: Address ${address} is not a valid contract.`);
+        process.exit();
+      }
     }
   }
   
@@ -31,7 +41,7 @@ module.exports = function ( options ) {
     
     if( options.cli ) {
     
-      eth_host = readlineSync.question('Ethereum rpc host ( xxx.xxx.xxx.xxx ): ') || '';
+      eth_host = readlineSync.question('Ethereum rpc host ( xxx.xxx.xxx.xxx ): ') || 'spore.memhub.io';
       eth_port = readlineSync.question('Ethereum rpc port [8545]: ') || '8545';
       // test rpc connection
       // 
