@@ -155,7 +155,7 @@ spore install mypackage
 ```
 ## Beginner Turorial
 
-[How to write a coin tutorial with truffle and spore](doc/coin_tutorial.md)
+[How to write a coin tutorial with truffle and spore](doc/tutorial_coin.md)
 
 ## API documentation
 
