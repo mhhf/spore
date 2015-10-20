@@ -5,11 +5,14 @@
 
 ![](named_logo.png)
 
-
 For fast development of DApps a package management is needed. 
 Spore is a Proof of Concept prototype for a such package manager build on top of truffle, ethereum and ipfs.
 
 Any form on Feedback and contribution is highly wellcome.
+
+
+{{toc}}
+
 
 ## Installation
 
@@ -32,6 +35,7 @@ npm -g i truffle
 ```
 
 For full decentral usage:
+
 * install [ipfs](https://ipfs.io/docs/install/).
 * install [ethereum rpc node](https://ipfs.io/docs/install/)
 
@@ -50,7 +54,7 @@ http://spore.memhub.io
 ![](gui.png)
 (Decentral version on IPFS will follow shortly)
 
-### Workflow
+## Workflow
 Create a new project:
 ```
 mkdir mypackage 
@@ -107,10 +111,14 @@ Now you can install the package `mypackage` along with it's dependencies in anot
 ```
 spore install mypackage
 ```
+## Beginner Turorial
+
+[How to write a coin tutorial with truffle and spore](doc/coin_tutorial.md)
 
 ## API documentation
 
 [Read the Full API Documentation here.](doc/api.md)
+
 
 ## Development - Installation
 This will guide you trough a **local** development installation. The contract is not deployed on a global chain, yet.

@@ -1,5 +1,6 @@
 var _ = require('underscore');
 var fs = require('fs');
+var toc = require('markdown-toc');
 
 // Set template to Mustache
 _.templateSettings = {
@@ -15,6 +16,9 @@ var ipfs_v                    = __package.spore.ipfs_version;
 
 // Load Readme template
 var raw_tmp                   = fs.readFileSync('src/doc/README.tmp.md', 'utf8');
+
+var toc_                      = toc( raw_tmp ).content;
+
 var tmp                       = _.template( raw_tmp );
 
 // Configure template options
@@ -28,7 +32,7 @@ var api_doc                   = fs.readFileSync('doc/api.md','utf8');
 
 
 // Create template object
-var obj                       = { cli, spore_json, api_doc };
+var obj                       = { cli, spore_json, api_doc, toc: toc_ };
 
 // Generate readme text
 var readme                    = tmp( obj );

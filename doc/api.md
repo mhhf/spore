@@ -1,4 +1,25 @@
-### Help
+## API Decumentation
+
+- [help](#help)
+- [init](#init)
+- [upgrade](#upgrade)
+- [publish](#publish)
+- [add](#add)
+- [link](#link)
+- [info](#info)
+- [install](#install)
+- [clone](#clone)
+- [uninstall](#uninstall)
+- [remote list](#remote-list)
+- [remote select](#remote-select)
+- [remote remove](#remote-remove)
+- [update](#update)
+- [search](#search)
+- [instance add](#instance-add)
+- [instance list](#instance-list)
+
+
+### help
 ```
 $ spore --help 
 
@@ -38,7 +59,7 @@ Options:
   --verbose                    Shows interlal logs
 ```
 
-###init
+### init
 ```
 spore init
 ```
