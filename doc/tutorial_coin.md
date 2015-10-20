@@ -5,7 +5,14 @@
 <!-- it to another user. -->
 
 
-### Setup
+- [setup](#setup)
+- [discover](#discover)
+- [develop](#develop)
+- [compile and deploy](#compile-and-deploy)
+- [publish](#publish)
+
+
+### setup
 
 Here we make a custom Coin contract, test it, and make a package for others to use.
 We will do this with truffle, so you will need [truffle](https://github.com/ConsenSys/truffle) and 
@@ -30,7 +37,7 @@ On your first run, spore will guide you trough a setup process. The package nami
 
 <!--  Contracts in ethereum are compiled down to an assembly like language for the EVM (Ethereum Virtual Machine) where the code is executed. Ethereums special feature is that every code execution is timestaped  -->
 
-### Discover
+### discover
 
 The ethereum foundation and others have already written coin contracts. Also there is a standard API for coin contracts, so that the coin can be openly traded on a decentralized exchange and easily accessed with a wallet. To see what other people have already done, we can search Spore for `Coin`:
 
@@ -78,7 +85,7 @@ $ spore info coin
 
 ```
 
-### Clone
+### develop
 Now we can **clone** this package to change it.
 
 ```bash
@@ -182,7 +189,7 @@ contract currency is mortal {
 
 ```
 
-### Compile/Deploy
+### compile and deploy
 Now we are ready to go and write some tests on our mortal coin contract:
 `test/mortalcoin.js`
 
@@ -244,7 +251,7 @@ $ truffle deploy -e production
 This will deploy mortalcoin to your production environment. 
 That was fast, right?
 
-### Publish
+### publish
 If you want to allow others the usage of **mortalcoin** along with your test
 you can publish it as a package:
 Change the name of the project from coin to mortalcoin in your `spore.json` file.
