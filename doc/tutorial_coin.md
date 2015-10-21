@@ -8,6 +8,7 @@
 - [setup](#setup)
 - [discover](#discover)
 - [develop](#develop)
+- [setup](#setup)
 - [compile and deploy](#compile-and-deploy)
 - [publish](#publish)
 
@@ -31,7 +32,9 @@ $ testrpc
 ```
 
 
-On your first run, spore will guide you trough a setup process. The package naming resolution is done on the ethereum chain, therefore a connection to a rpc node is required. If you don't provide an own rpc node, spore will access the chain trough a central rpc server `spore.memhub.io:8545`, but **the use of an own rpc node is highly recomended**. The package content and its header is stored on [ipfs](ipfs.io). Here Spore also provides a default fallback to the standard gateway on `gateway.ipfs.io:80`. For the full experience, please install ipfs and use it locally. I'll further assume that you have connected spore with an own rpc node and local ipfs.
+On your first run, spore will guide you trough a setup process. The package naming resolution is done on the ethereum chain, therefore a connection to a rpc node is required. If you don't provide an own rpc node, spore will access the chain trough a central rpc server `spore.memhub.io:8545`, but **the use of an own rpc node is highly recomended**. The package content and its header is stored on [ipfs](ipfs.io). Here Spore also provides a default fallback to the standard gateway on `gateway.ipfs.io:80`. For the full experience, please install ipfs and use it locally. 
+
+We will further assume that you have connected spore with an own rpc node and local ipfs.
 
 
 
@@ -47,7 +50,7 @@ Lets **update** its database:
 
 ```bash
 $ spore update 
-Packages updated: spore, owned, mortal, register, spore_instance, coin
+Packages updated: spore, owned, mortal, coin, spore_instance
 
 ```
 
@@ -75,7 +78,7 @@ $ spore info coin
   "description": "Coin proposal by ethereums standardized contract api",
   "dependencies": {},
   "contracts": {
-    "currency": "QmPbsLDhgEYrrUvPXGYBNV7roebNYQFiw6TvoQykiZSHru"
+    "currency": "QmeziEPS49PKRtchFEy4QRHYG25PYoTaqtHRA5NbsLrecq"
   },
   "tags": [],
   "root": "QmZaaK9DhBVTtGRDbTtPih5RsYmRZwd7vw6jHCWuXmcBHS",
@@ -86,7 +89,8 @@ $ spore info coin
 ```
 
 ### develop
-Now we can **clone** this package to change it.
+
+Now we **clone** this package to change it.
 
 ```bash
 $ spore clone coin 
@@ -128,13 +132,13 @@ $ spore info mortal
   "version": "0.1.0",
   "description": "alow suicide by owner.",
   "dependencies": {
-    "owned": "QmY9D8A1PHAWuXgbbF5VrkRmnjn1YHKFqDwsBCxys9TCQh"
+    "owned": "QmdAtZ66QjSJ6AuyX6Vp3s7SVZXwrj7txf6GS3C9gBaoyd"
   },
   "contracts": {
     "mortal": "QmVca2MpQJTwpK4YZzi4Rea5txezQxALcdKsdcmCj42JLf"
   },
   "tags": [],
-  "root": "Qmc3r38Pp148FfuDfy4j3xCDx7WXd46Mbk1rLyn7yqpZQ9",
+  "root": "QmVPB4M51FMWRN11xioYQe22hDjJ1ExyTUQBpcCD6tZK1d",
   "solc": "0.1.3-4457170b",
   "pv": "0.0.8"
 }
@@ -173,7 +177,7 @@ missing imports with the correct ones:
 
 ```bash
 $ spore link 
-Changed import in contracts/currency.sol to ../spore_packages/mortal-a8aCXafZ/contracts/mortal
+Changed import in contracts/currency.sol to ../spore_packages/mortal-Y9v8ruHW/contracts/mortal
 
 ```
 
@@ -181,7 +185,7 @@ This will leave `contracts/coin.sol` with:
 
 ```bash
 $ head -5 contracts/currency.sol 
-import "../spore_packages/mortal-a8aCXafZ/contracts/mortal";
+import "../spore_packages/mortal-Y9v8ruHW/contracts/mortal";
 contract currency is mortal {
 
     struct Account {
@@ -234,10 +238,10 @@ Using environment test.
 
 
   Contract: currency
-    ✓ has to be mortal (444ms)
+    ✓ has to be mortal (445ms)
 
 
-  1 passing (841ms)
+  1 passing (709ms)
 
 
 ```

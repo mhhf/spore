@@ -32,7 +32,9 @@ $ testrpc
 ```
 
 
-On your first run, spore will guide you trough a setup process. The package naming resolution is done on the ethereum chain, therefore a connection to a rpc node is required. If you don't provide an own rpc node, spore will access the chain trough a central rpc server `spore.memhub.io:8545`, but **the use of an own rpc node is highly recomended**. The package content and its header is stored on [ipfs](ipfs.io). Here Spore also provides a default fallback to the standard gateway on `gateway.ipfs.io:80`. For the full experience, please install ipfs and use it locally. I'll further assume that you have connected spore with an own rpc node and local ipfs.
+On your first run, spore will guide you trough a setup process. The package naming resolution is done on the ethereum chain, therefore a connection to a rpc node is required. If you don't provide an own rpc node, spore will access the chain trough a central rpc server `spore.memhub.io:8545`, but **the use of an own rpc node is highly recomended**. The package content and its header is stored on [ipfs](ipfs.io). Here Spore also provides a default fallback to the standard gateway on `gateway.ipfs.io:80`. For the full experience, please install ipfs and use it locally. 
+
+We will further assume that you have connected spore with an own rpc node and local ipfs.
 
 
 
@@ -60,7 +62,8 @@ Lets look on the **info** of this package:
 {{>spore info coin }}
 
 ### develop
-Now we can **clone** this package to change it.
+
+Now we **clone** this package to change it.
 
 {{>spore clone coin }}
 
