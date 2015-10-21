@@ -1,6 +1,6 @@
 {
   "name": "eth-spore",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "spore": {
     "ipfs_version": "0.0.3",
     "client_version": "0.0.3",
