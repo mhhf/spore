@@ -181,3 +181,14 @@ An example header for `spore` is:
 
 The *dependencies* property contains packages with their ipfs header file.
 The *root* property points to a ipfs directory node which contains the package files.
+
+## Next steps
+
+* filling spore with content
+* integrate a light-wallet into it, so that the user don't need to run a full node to publish packages.
+* extend it to other dev-tools and testing-frameworks like populus or embark
+* add a ( decentral ) plugin system with pre publish and post publish hooks. Use cases could be:
+    * different proposals (pull request) for one package
+    * ownership based change voting
+    * oracle filter which only allows a new version of a package, if all tests succeeded
+
