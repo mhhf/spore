@@ -5,7 +5,6 @@ var fs                  = require('fs-extra');
 var child_process       = require('child_process');
 var _                   = require('underscore');
 var path                = require('path');
-var web3                = require('web3');
 var deasync             = require('deasync');
 
 
@@ -202,7 +201,7 @@ var publish = function( config ){
   var assertOwnership = function( name ) {
     var addr = config.contracts.spore().getOwnerSync( name );
     if( addr != '0x0000000000000000000000000000000000000000' 
-       && addr != web3.eth.defaultAccount ) 
+       && addr != config.web3().eth.defaultAccount ) 
      throw new Error(`Package with name ${json.name} is already owned by ${addr}`);
   }
   

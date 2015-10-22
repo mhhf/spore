@@ -50,7 +50,7 @@ Lets **update** its database:
 
 ```bash
 $ spore update 
-Packages updated: spore, owned, mortal, coin, spore_instance
+Packages updated: spore, owned, mortal, coin, spore_instance, a
 
 ```
 
@@ -239,10 +239,10 @@ Compiling contracts...
 
 
   Contract: currency
-    ✓ has to be mortal (457ms)
+    ✓ has to be mortal (441ms)
 
 
-  1 passing (656ms)
+  1 passing (627ms)
 
 
 ```

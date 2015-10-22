@@ -13,7 +13,7 @@ chai.should();
 var working_dir = __dirname+'/.scenarios/b';
 
 
-var config = CONFIG({ working_dir }, {cli: false});
+var config = CONFIG({ working_dir }, {cli: false, test: true});
 
 describe('spore#uninstall', function() {
   
@@ -22,7 +22,7 @@ describe('spore#uninstall', function() {
     scenarios.setup( 'b' )
     
     init( config );
-    config.package_name = 'a';
+    config['<package>'] = 'a';
     
     require('../src/lib/install.es6')( config );
     

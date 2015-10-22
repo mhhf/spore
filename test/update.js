@@ -15,8 +15,8 @@ var CONFIG      = require('../src/lib/config.es6');
 var working_dir_a_ = __dirname+'/.scenarios/a_';
 var working_dir_b  = __dirname+'/.scenarios/b';
 
-var configA = CONFIG({working_dir: working_dir_a_}, {cli: false});
-var configB = CONFIG({working_dir: working_dir_b}, {cli: false});
+var configA = CONFIG({working_dir: working_dir_a_}, {cli: false, test: true });
+var configB = CONFIG({working_dir: working_dir_b}, {cli: false, test: true});
 
 chai.should();
 
@@ -52,7 +52,7 @@ describe('spore#upgrade', function() {
     init( configB );
     
     
-    configB.package_name = 'a_';
+    configB['<package>'] = 'a_';
     // install a
     require('../src/lib/install.es6')( configB );
     

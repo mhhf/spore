@@ -7,7 +7,7 @@ var Spore = function ( config ){
 
   var Contract = require('../../contract.json').Spore;
 
-  var address = config.chains[ config.selected ].address || process.env.SPORE_ADDRESS || Contract.address;
+  var address = process.env.SPORE_ADDRESS || config.chains[ config.selected ].address || Contract.address;
   var abi = Contract.abi;
   
   

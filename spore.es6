@@ -61,9 +61,7 @@ if( app.init ) { //======================================================== INIT
 
 } else if( app.uninstall ) { //======================================= UNINSTALL
   
-  var package_name = app['<package>'];
-  
-  require('./src/lib/uninstall.es6')( _.extend( config, { package_name } ) );
+  require('./src/lib/uninstall.es6')( config );
 
 } else if( app.upgrade) { //============================================ UPGRADE
   

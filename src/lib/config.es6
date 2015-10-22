@@ -6,7 +6,8 @@ var IPFS            = require('./ipfs.es6');
 var PKG             = require('./package.es6');
 var __package       = require('../../package.json');
 var colors          = require('colors');
-var web3            = require('web3');
+var Web3            = require('web3');
+var web3;
 
 var client_protocol_version = '0.0.3';
 var ipfs_protocol_version = '0.0.3';
@@ -73,7 +74,11 @@ module.exports = function ( config, options ){
       var remote = cfg.selected;
       var host = cfg.chains[remote].host;
       var port = cfg.chains[remote].port;
-      web3.setProvider(new web3.providers.HttpProvider(`http://${host}:${port}`));
+      if( cfg.test ) {
+        host = 'localhost';
+        port = '8545';
+      }
+      web3 = new Web3(new Web3.providers.HttpProvider(`http://${host}:${port}`));
       
       if( !web3.isConnected() ) {
         console.log('ERROR'.red+`: can't connect to rpc network on ${host}:${port}.`);

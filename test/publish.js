@@ -15,7 +15,7 @@ chai.should();
 
 var working_dir = __dirname+'/.scenarios/a';
 
-var config = CONFIG({working_dir}, {cli: false});
+var config = CONFIG({working_dir}, {cli: false, test: true});
 var hash, json;
 
 describe('spore#publish', function() {

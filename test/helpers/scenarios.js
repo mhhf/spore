@@ -5,7 +5,7 @@ var fs = require('fs-extra');
 var scenarios = function(){
   
   var setupAll = function() {
-    fs.mkdirSync('./test/.scenarios/');
+    fs.ensureDirSync('./test/.scenarios/');
   }
   
   var setup = function( name, dep ) {

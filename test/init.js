@@ -9,7 +9,7 @@ var init        = require('../src/lib/init.es6');
 var scenarios   = require('./helpers/scenarios.js');
 var working_dir = __dirname+'/.scenarios/a';
 
-var config = CONFIG( { working_dir }, { cli: false } );
+var config = CONFIG( { working_dir }, { cli: false, test: true } );
 
 describe('init', function() {
   

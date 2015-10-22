@@ -8,14 +8,14 @@ var _               = require('underscore');
 var uninstall = function( config ) {
   
   // check if package is installed
-  config.pkg().assertDependency( config.package_name );
+  config.pkg().assertDependency( config['<package>'] );
   
-  config.pkg().removeDep( config.package_name );
+  config.pkg().removeDep( config['<package>'] );
   
   config.pkg().saveJson();
   
   if( config.cli )
-    console.log(`Package "${config.package_name}" successful removed."`.green);
+    console.log(`Package "${config['<package>']}" successful removed."`.green);
 
 }
 module.exports = uninstall;

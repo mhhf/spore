@@ -7,14 +7,16 @@ var _            = require('underscore');
 require('shelljs/global');
 
 var Ipfs         = require('./ipfs.es6');
-var web3         = require('web3');
+var Web3         = require('web3');
+var web3;
 var colors       = require('colors');
 
 module.exports = function ( options ) {
   
   
   var getAddrForChain = function( web3 ) {
-    var bh = web3.eth.getBlock(0).hash;
+    var testrpc = (/TestRPC/).test(web3.version.client);
+    var bh = testrpc?'testrpc':web3.eth.getBlock(0).hash;
     if( bh === '0x34288454de81f95812b9e20ad6a016817069b13c7edc99639114b73efbc21368' ) {
       // Consensys Testnet 
       return '0x774b349719f8007bb479c5721e510d4803385d04';
@@ -45,7 +47,7 @@ module.exports = function ( options ) {
       eth_port = readlineSync.question('Ethereum rpc port [8545]: ') || '8545';
       // test rpc connection
       // 
-      web3.setProvider(new web3.providers.HttpProvider(`http://${eth_host}:${eth_port}`)); 
+      web3 = new Web3(new Web3.providers.HttpProvider(`http://${eth_host}:${eth_port}`)); 
       
       if( web3.isConnected() ) {
         spore_address = getAddrForChain( web3 );
@@ -105,7 +107,7 @@ if you whish to publish packages or use spore in a decentralized way.\n`);
     }
     
     
-    web3.setProvider(new web3.providers.HttpProvider(`http://localhost:8545`));
+    web3 = new Web3(new Web3.providers.HttpProvider(`http://localhost:8545`));
     if( !web3.isConnected() ) {
       console.log("WARN".yellow + `: Could not find a rpc connection on localhost:8545.`);
       console.log(`If no chain information are provided this will use spore.memhub.io rpc client as default.`);
@@ -148,7 +150,7 @@ you won't be able to publish packages. The usage of an own rpc node is highly re
   var pingSpore = function( host, port, address ) {
     
     try {
-      web3.setProvider(new web3.providers.HttpProvider(`http://${host}:${port}`));
+      web3 = new Web3(new Web3.providers.HttpProvider(`http://${host}:${port}`));
       var c = web3.version.client;
     } catch ( e ) {
       if( options.cli )

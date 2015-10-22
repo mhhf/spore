@@ -29,7 +29,6 @@
   "license": "MIT",
   "dependencies": {
     "async": "^1.4.2",
-    "babel": "*",
     "colors": "^1.1.2",
     "deasync": "^0.1.1",
     "docopt": "^0.6.2",
@@ -41,15 +40,12 @@
     "levelup": "^1.2.1",
     "markdown-toc": "^0.11.7",
     "merkle-patricia-tree": "^2.0.3",
-    "ministyle": "^0.1.4",
-    "miniwrite": "^0.1.4",
     "moment": "^2.10.6",
     "readline-sync": "^1.2.21",
     "shelljs": "^0.5.3",
     "tv4": "^1.2.5",
-    "tv4-reporter": "0.0.4",
     "underscore": "^1.8.3",
-    "web3": "^0.12.2"
+    "web3": "^0.14.1"
   },
   "devDependencies": {
     "chai": "^3.2.0",
