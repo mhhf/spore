@@ -10,6 +10,10 @@ _.templateSettings = {
 
 // TODO - remove database
 // TODO - refactor template indocator from mustashe to default markdown ```bash...```
+// 
+
+// run testrpc
+var testrpc = exec('testrpc', {silemt:true, async:true});
 
 var c = function( str ) {
   return "```\n"+str+"\n```";
@@ -25,8 +29,6 @@ var e = function( str, silent ) {
   console.log('>', str);
   console.log(res);
   console.log('----------');
-  
-  
   
   if(silent) return '';
   

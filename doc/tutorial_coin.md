@@ -235,13 +235,14 @@ test it:
 ```bash
 $ truffle test 
 Using environment test.
+Compiling contracts...
 
 
   Contract: currency
-    ✓ has to be mortal (445ms)
+    ✓ has to be mortal (457ms)
 
 
-  1 passing (709ms)
+  1 passing (656ms)
 
 
 ```
