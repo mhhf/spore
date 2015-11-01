@@ -8,7 +8,7 @@ Usage:
   spore link
   
   spore info     [<package>]
-  spore install   <package>
+  spore install [<package>]
   spore clone     <package>
   spore uninstall <package>
   
@@ -20,15 +20,15 @@ Usage:
   spore update
   spore search <string>
   
-  spore instance add <package> <address> --contract <contract>
+  spore instance add <package> <address> [--contract=<contract>]
   spore instance list <package>
   
-Arguments:
-  <package>                    Package name or hash
-  <path>                       path to file/ directory
-  <name>                       rpc settings name
+  spore bin list
+  spore bin call <name> [<args>...]
+  spore bin bundle [<package>]
+  spore bin remove <name>
   
 Options:
-  -v, --version                Shows the version of spore
-  -h, --help                   Shows this help screen
-  --verbose                    Shows interlal logs
+  -v, --version
+  -h, --help
+  --verbose

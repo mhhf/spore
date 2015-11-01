@@ -269,6 +269,8 @@ var publish = function( config ){
   // console.log(jsonHash);
   // jsonHash = jsonHash.slice(0,2)+"Q"+jsonHash.slice(3);
   
+  console.log( json.name, jsonHash );
+  
   var tx = config.contracts.spore().registerPackageSync( json.name, jsonHash, { gas: 300000 } );
   config.log(tx);
 

@@ -142,6 +142,7 @@ you won't be able to publish packages. The usage of an own rpc node is highly re
       };
     }
     
+    obj.bin = {};
     
     return obj;
   }

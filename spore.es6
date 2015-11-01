@@ -11,12 +11,9 @@ var __package = require('./package.json');
 
 var cli = fs.readFileSync(__dirname + `/src/specs/cli_${__package.spore.cli_version}.docopt`,'utf8');
 
-// spore status
-
-
 var app = docopt.docopt(cli, {
   argv: process.argv.slice(2),
-  help: true,
+  help: false,
   version: __package.version
 });
 
@@ -25,9 +22,7 @@ var config = CONFIG( app, {
 });
 
 
-// var config = require( home + '/.sporerc.json' );
-
-if( app.init ) { //======================================================== INIT
+ if( app.init ) { //======================================================== INIT
   
   // true fir cli
   require('./src/lib/init.es6')( config );
@@ -97,6 +92,19 @@ if( app.init ) { //======================================================== INIT
   
   require('./src/lib/link.es6')( config );
 
-}
+} else if( app.bin ) {
+  
+  if( app.bundle ) {
+    require('./src/lib/bin/bundle.es6')( config );
+  } else if ( app.list ) {
+    require('./src/lib/bin/list.es6')( config );
+  } else if( app.call ) {
+    require('./src/lib/bin/call.es6')( config );
+  } else if( app.remove ) {
+    require('./src/lib/bin/remove.es6')( config );
+  }
+  
 
-process.exit();
+} 
+  
+// process.exit();

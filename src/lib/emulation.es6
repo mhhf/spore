@@ -2,7 +2,7 @@ var VM = require('ethereumjs-vm');
 var Account = require('ethereumjs-account');
 var async = require('async');
 var utils = require('ethereumjs-util');
-var Trie = require('merkle-patricia-tree/secure.js');
+var Trie = require('merkle-patricia-tree');
 var Transaction = require('ethereumjs-tx')
 var deasync = require('deasync');
 
@@ -51,6 +51,7 @@ function runTx(raw, cb) {
 
   //run the tx
   vm.runTx({tx: tx, from: addr.toString('hex')}, function(err, results) {
+    // console.log(err, results);
     var code = results.vm.return.toString('hex');
     cb( err, code );
   })
@@ -62,9 +63,9 @@ module.exports = function() {
   var execInit = function( code, cb ) {
     
     var rawTx = {
-      nonce: '00',
-      gasPrice: '09184e72a000',
-      gasLimit: '90710',
+      nonce: '0x00',
+      gasPrice: '0x00000e72a000',
+      gasLimit: '0x90710',
       data: code 
     }
     
