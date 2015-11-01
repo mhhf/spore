@@ -6,13 +6,14 @@ var _      = require('underscore');
 var CONFIG = require( '../config.es6' );
 var readlineSync = require('readline-sync');
 var vm     = require('../emulation.es6');
+var Compiler = require('../compiler.es6');
 require('shelljs/global');
 
 var binDir = process.env.SPORE_NPM_LOCATION+'/bin';
 
 module.exports = function( config ) {
   
-  // look if spore bin is in PATH to execute binaries out of the shell
+  // Setup: look if spore bin is in PATH to execute binaries out of the shell
   if( process.env.PATH.split(':').indexOf( binDir ) === -1 ) {
     let answer = readlineSync.question(`Your spore directory is not in your PATH variable.\nIts need to be, so that you can execute your bundles directly.\nDo you want to add spore bin to your local path? [y/n]:`);
     if( (/^y/).test( answer ) ) {
@@ -25,9 +26,17 @@ module.exports = function( config ) {
   
   var pkg = config['<package>'];
   
-  var ipfsLink = config.contracts.spore().getLinkSync( pkg );
+  if( !pkg ) {
+    
+    var head = { contracts: Compiler( config ).compileContracts( config.working_dir, config.pkg().json.files ) };
+    
+  } else {
+    
+    var ipfsLink = config.contracts.spore().getLinkSync( pkg );
+    
+    var head = config.ipfs().catJsonSync( ipfsLink );
   
-  var head = config.ipfs().catJsonSync( ipfsLink );
+  }
   
   var cs = Object.keys(head.contracts);
   

@@ -60,13 +60,15 @@ module.exports = function( config ) {
   
   if( app.info ) {
     
-    var cli = 'Usage:\n' + abi.filter( f => f.type === 'function' ).map( f => {
+    var cli = 'Usage:\n' + abi
+    .filter( f => f.type === 'function' )
+    .map( f => {
       let params = f.inputs.map( i => '<'+( i.name || i.type )+'>').join(' ');
       let doc = config.bin[caller].contract.doc.methods[f.name+'('+_.pluck( f.inputs, 'type' ).join(',')+')' ];
       let paramDoc = _.map( doc && doc.params, 
                            (d, n) => '    '+n+':'+f.inputs.find( i => i.name === n ).type +' - '+d+'\n'
                           ).join('');
-      return `  ${ caller.yellow } ${f.name.yellow } ${params.yellow } ${doc && '\n  '+doc.details || ''}\n${paramDoc}`;
+      return `  ${ caller.yellow } ${f.name.yellow } ${params.yellow } ${f.constant?'\n  CONSTANT':''} ${doc && '\n  '+doc.details || ''}\n${paramDoc}`;
     }).join('\n');
     
     console.log(`${address.slice(0,10)}... @ ${chain}( http://${config.chains[chain].host}:${config.chains[chain].port} )`);
