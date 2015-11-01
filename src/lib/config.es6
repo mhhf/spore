@@ -102,6 +102,16 @@ module.exports = function ( config, options ){
     return pkg;
   }
   
+  cfg.addBundle = function( name, obj ) {
+    env.bin[name] = obj;
+    saveConfig();
+  }
+  
+  cfg.removeBundle = function( name ) {
+    delete env.bin[name];
+    saveConfig();
+  }
+  
   cfg.addChain = function( name ) {
     var chain = Setup.addChain();
     env.chains[name] = chain;

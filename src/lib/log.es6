@@ -5,7 +5,7 @@ module.exports = function( config ) {
   var lvl = 3;
 
   var log = function( ) {
-    if(!config['--verbose'] ) return false;
+    if( false && !config['--verbose'] ) return false;
     if( typeof arguments[0] === 'number' ) {
       if(arguments[0] < lvl) 
         console.log(_.values(arguments).slice(1).join(' '));

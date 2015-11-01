@@ -4,7 +4,7 @@
   "spore": {
     "ipfs_version": "0.0.3",
     "client_version": "0.0.3",
-    "cli_version": "0.0.5"
+    "cli_version": "0.0.6"
   },
   "description": "Spore - Simple package manager for Ethereum",
   "preferGlobal": true,
@@ -29,9 +29,16 @@
   "license": "MIT",
   "dependencies": {
     "async": "^1.4.2",
+    "cli-spinner": "^0.2.1",
     "colors": "^1.1.2",
     "deasync": "^0.1.1",
     "docopt": "^0.6.2",
+    "easy-table": "^1.0.0",
+    "ether-pudding": "^1.0.3",
+    "ethereumjs-account": "^1.0.3",
+    "ethereumjs-tx": "^0.6.9",
+    "ethereumjs-util": "^2.0.3",
+    "ethereumjs-vm": "^1.0.1",
     "file": "^0.2.2",
     "fs-extra": "^0.24.0",
     "ipfs-api": "^2.4.0",
@@ -39,7 +46,7 @@
     "leveldown": "^1.4.1",
     "levelup": "^1.2.1",
     "markdown-toc": "^0.11.7",
-    "merkle-patricia-tree": "^2.0.3",
+    "merkle-patricia-tree": "^2.1.0",
     "moment": "^2.10.6",
     "readline-sync": "^1.2.21",
     "shelljs": "^0.5.3",
